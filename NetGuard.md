@@ -1,5 +1,7 @@
 # NetGuard | Hackviser
 
+![image](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-30%2001.01.20.png)
+
   
 
 Bu yazıda, **Nmap** taramasıyla başlayan ve sonrasında **FTP**, **NFS** servisleri ile **Textpattern CMS** üzerinden **root** yetkisine kadar ilerleyen adım‑adım süreci anlatıyorum.
