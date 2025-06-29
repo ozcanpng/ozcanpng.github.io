@@ -1,46 +1,61 @@
-  
-
 # NetGuard | Hackviser
 
+  
 
-Bu yazıda, **Nmap** taramasıyla başlayan ve sonrasında **FTP**, **NFS** servisleri ile **Textpattern CMS** üzerinden **root** yetkisine kadar ilerleyen adım‑adım süreci anlatıyorum. 
+Bu yazıda, **Nmap** taramasıyla başlayan ve sonrasında **FTP**, **NFS** servisleri ile **Textpattern CMS** üzerinden **root** yetkisine kadar ilerleyen adım‑adım süreci anlatıyorum.
 
+  
 
 ---
 
-
   
+
 ## 1. Nmap ve Dirsearch Çıktılarının Analizi
 
   
 
-```text
+```python
+
+  
 
 21/tcp FTP (vsftpd 3.0.3) – anonim giriş açık, PDF dosyası mevcut
 
+  
+
 22/tcp SSH (OpenSSH 8.4p1)
+
+  
 
 80/tcp HTTP (Apache) – Textpattern CMS
 
+  
+
 111/tcp rpcbind (NFS & RPC servisleri)
+
+  
 
 2049/tcp NFS (v3–4) – paylaşılan dizin mount edilebilir
 
+  
+
 3306/tcp MySQL 8.0.36
+
+  
 
 ```
 
   
 
-![Nmap Çıktısı](Ekran%20Resmi%202025-06-29%2022.18.44.png)
+![Nmap Çıktısı](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.18.44.png)
 
+  
   
 
 Dirsearch taramasında da **Textpattern CMS** dizinini doğruladık:
 
   
 
-![Dirsearch Çıktısı](Ekran%20Resmi%202025-06-29%2022.19.00.png)
+![Dirsearch Çıktısı](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.19.00.png)
 
   
 
@@ -66,7 +81,7 @@ Anonim kullanıcı ile bağlanıp iki PDF dosyasını indirdik:
 
   
 
-![FTP İndirme](Ekran%20Resmi%202025-06-29%2022.08.29.png)
+![FTP İndirme](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.08.29.png)
 
   
 
@@ -82,7 +97,7 @@ Anonim kullanıcı ile bağlanıp iki PDF dosyasını indirdik:
 
   
 
-![PDF İncelemesi](Ekran%20Resmi%202025-06-29%2023.10.50.png)
+![PDF İncelemesi](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2023.10.50.png)
 
   
 
@@ -98,7 +113,7 @@ Sitedeki **Author** alanından “_Blog gönderilerini yazan yazar kimdir?_” s
 
   
 
-![Yazar Bilgisi](Ekran%20Resmi%202025-06-29%2023.11.14.png)
+![Yazar Bilgisi](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2023.11.14.png)
 
   
 
@@ -114,7 +129,7 @@ Nmap çıktısı, NFS paylaşımlarını gösteriyordu. Mount edip içerik kontr
 
   
 
-![NFS Mount](Pasted%20image%2020250629231521.png)
+![NFS Mount](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.09.03.png)
 
   
 
@@ -130,7 +145,7 @@ Paylaşılan dizinde `site-backup.zip` bulduk ve çıkardık:
 
   
 
-![Yedek Dosyalar](Pasted%20image%2020250629231550.png)
+![Yedek Dosyalar](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.11.28.png)
 
   
 
@@ -146,7 +161,7 @@ Yedekteki `textpattern/config.php` dosyasında **database** erişim bilgileri ye
 
   
 
-![config.php](Ekran%20Resmi%202025-06-29%2022.12.14.png)
+![config.php](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.12.14.png)
 
   
 
@@ -162,7 +177,7 @@ Elde ettiğimiz kimlik bilgileriyle veritabanına giriş yaptık:
 
   
 
-![MySQL Bağlantısı](Pasted%20image%2020250629232152.png)
+![MySQL Bağlantısı](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.13.56.png)
 
   
 
@@ -178,7 +193,7 @@ Elde ettiğimiz kimlik bilgileriyle veritabanına giriş yaptık:
 
   
 
-![txp_users Tablosu](Pasted%20image%2020250629232250.png)
+![txp_users Tablosu](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.14.49.png)
 
   
 
@@ -198,9 +213,11 @@ Hash’i kırmak yerine, kendi oluşturduğumuz bcrypt hash’i ile **admin** pa
 
   
 
-![bcrypt Hash](Pasted%20image%2020250629232643.png)
+![bcrypt Hash](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.19.22.png)
 
-![UPDATE Sorgusu](Pasted%20image%2020250629232710.png)
+  
+
+![UPDATE Sorgusu](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.21.32.png)
 
   
 
@@ -208,9 +225,11 @@ Ardından **Textpattern** arayüzüne `textpattern:admin` ile giriş yaptık:
 
   
 
-![Textpattern Girişi](Pasted%20image%2020250629232808.png)
+![Textpattern Girişi](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.21.52.png)
 
-![Panel Görünümü](Pasted%20image%2020250629232828.png)
+  
+
+![Panel Görünümü](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.22.02.png)
 
   
 
@@ -226,11 +245,15 @@ Paneldeki **Upload** bölümüne, revshells.com’dan düzenlediğim PHP reverse
 
   
 
-![Reverse Shell Yükleme](Pasted%20image%2020250629232942.png)
+![Reverse Shell Yükleme](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.23.16.png)
 
-![Yüklenen Dosya](Pasted%20image%2020250629233033.png)
+  
 
-![Listener](Ekran%20Resmi%202025-06-29%2022.34.14.png)
+![Yüklenen Dosya](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.34.05.png)
+
+  
+
+![Listener](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.34.14.png)
 
   
 
@@ -250,7 +273,7 @@ Sonuç: **www‑data** kullanıcısı ile başarılı bağlantı.
 
   
 
-![İlginç Dosyalar](Pasted%20image%2020250629233206.png)
+![İlginç Dosyalar](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.36.53.png)
 
   
 
@@ -258,7 +281,7 @@ Sonuç: **www‑data** kullanıcısı ile başarılı bağlantı.
 
   
 
-![Log Değişikliği](Pasted%20image%2020250629233449.png)
+![Log Değişikliği](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.48.32.png)
 
   
 
@@ -266,7 +289,7 @@ Dinleyiciye geri döndüğümde **root** yetkisiyle shell elde ettim:
 
   
 
-![Root Shell](Pasted%20image%2020250629233527.png)
+![Root Shell](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.49.16.png)
 
   
 
@@ -284,11 +307,13 @@ Son olarak `/project` dizinine gidip kalan iki flag’i topladım:
 
 1. **“Firewall’ın dijital imzası nedir?”**
 
+  
+
 2. **“Firewall’a, administrator erişimi olan kişinin kullanıcı adı nedir?”**
 
   
 
-![Project Dizini](Pasted%20image%2020250629233614.png)
+![Project Dizini](https://github.com/ozcanpng/ozcanpng.github.io/blob/main/images/Ekran%20Resmi%202025-06-29%2022.50.37.png)
 
   
 
@@ -301,4 +326,3 @@ Son olarak `/project` dizinine gidip kalan iki flag’i topladım:
   
 
 Bu senaryoda, başlangıçtaki temel port taramasından yola çıkarak FTP, NFS ve CMS zafiyetlerini zincir şeklinde kullanıp tam yetki (root) elde ettik. Adımların her biri, gerçek dünyadaki saldırı yüzeylerini anlamak açısından öğreticiydi. Umarım bu write‑up hem CTF çözenlere hem de sistemlerini güvence altına almak isteyenlere fayda sağlar.
-
