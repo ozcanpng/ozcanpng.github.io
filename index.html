@@ -392,6 +392,39 @@ async function listRepos(){
   }
 }
 
+/* ---------- Markdown Dosya Listesi ---------- */
+async function listMarkdownFiles() {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents`);
+    const files = await res.json();
+    return files
+      .filter(f => f.name.endsWith(".md"))
+      .map(f => f.name.replace(".md", ""));
+  } catch (e) {
+    console.error("Markdown dosyaları alınamadı:", e);
+    return [];
+  }
+}
+
+/* ---------- POST Yükleme ---------- */
+async function loadMarkdownPost(name) {
+  const content = document.getElementById('content');
+  content.innerHTML = '<div class="loading">Yazı yükleniyor</div>';
+  try {
+    const res = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/${name}.md`);
+    let md = await res.text();
+    md = fixGitHubImages(md);
+    content.innerHTML = marked.parse(md);
+    [...content.children].forEach(el => el.classList.add('lazy-element'));
+    lazyReveal(content);
+    if (window.hljs) hljs.highlightAll();
+    document.title = `${name} - ozcanpng`;
+  } catch (e) {
+    console.error('Markdown yüklenemedi:', e);
+    content.innerHTML = notFound();
+  }
+}
+
 /* ---------- Aktif Nav ---------- */
 function updateActiveNav(){
   const hash = (location.hash.replace('#','') || 'home').split('=')[0];
@@ -400,26 +433,34 @@ function updateActiveNav(){
   if(active) active.classList.add('active');
 }
 
-/* ---------- Rotalar ---------- */
+/* ---------- ROTALAR & KULLANICI-BİLGİLERİ ---------- */
+const username = "ozcanpng";
+const repo = "ozcanpng.github.io";
+
 const routes = {
-  home: async ()=>{
+  home: async () => {
     const repoHTML = await listRepos();
+    const writeups = await listMarkdownFiles();
+
+    const writeupHTML = writeups.map(name => `
+      <li class="writeup-item lazy-element">
+        <a href="#post=${name}" class="writeup-link">📌 ${name}</a>
+      </li>
+    `).join('');
+
     document.getElementById('content').innerHTML = `
       <div class="section-title lazy-element">GitHub Projelerim</div>
       <div class="repo-grid">${repoHTML}</div>
 
       <div class="section-title lazy-element">Write-Up'larım</div>
-      <ul class="writeup-list">
-        <li class="writeup-item lazy-element">
-          <a href="#post=netguard" class="writeup-link">🔐 NetGuard | Hackviser</a>
-        </li>
-      </ul>
+      <ul class="writeup-list">${writeupHTML}</ul>
     `;
+
     document.title = 'ozcanpng | Ana Sayfa';
     lazyReveal();
   },
 
-  about: ()=>{
+  about: () => {
     document.getElementById('content').innerHTML = `
       <div class="lazy-wrapper">
         <div class="section-title lazy-child">Hakkımda</div>
@@ -433,32 +474,6 @@ const routes = {
     `;
     document.title = 'ozcanpng | Hakkımda';
     lazyRevealGroup();
-  },
-
-  netguard: async ()=>{
-    const content = document.getElementById('content');
-    content.innerHTML = '<div class="loading">Yazı yükleniyor</div>';
-    try{
-      const res = await fetch('https://raw.githubusercontent.com/ozcanpng/ozcanpng.github.io/main/NetGuard.md');
-      let md  = await res.text();
-      md = fixGitHubImages(md);
-      content.innerHTML = marked.parse(md);
-
-      /* Markdown içeriğini anim-ready yap */
-      [...content.children].forEach(el=>el.classList.add('lazy-element'));
-      lazyReveal(content);
-
-      /* Syntax highlight */
-      if(window.hljs) hljs.highlightAll();
-
-      document.title = 'NetGuard | Hackviser - ozcanpng';
-    }catch(e){
-      console.error('Markdown yüklenemedi:',e);
-      content.innerHTML = `
-        <div style="text-align:center;padding:2rem;color:var(--text-secondary);">
-          <h2>❌ Yazı yüklenemedi</h2><p>Lütfen daha sonra tekrar deneyin.</p>
-        </div>`;
-    }
   }
 };
 
@@ -471,20 +486,23 @@ function notFound(){
 }
 
 /* ---------- Router ---------- */
-function router(){
+function router() {
   const hash = location.hash.replace('#','');
-  if(!hash || hash==='home'){
+  const content = document.getElementById('content');
+
+  if (!hash || hash === 'home') {
     routes.home();
-  }else if(hash==='about'){
+  } else if (hash === 'about') {
     routes.about();
-  }else if(hash.startsWith('post=')){
+  } else if (hash.startsWith('post=')) {
     const postName = hash.split('=')[1];
-    routes[postName] ? routes[postName]() : (document.getElementById('content').innerHTML = notFound());
-  }else{
-    document.getElementById('content').innerHTML = notFound();
+    loadMarkdownPost(postName);
+  } else {
+    content.innerHTML = notFound();
   }
+
   updateActiveNav();
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 /* ---------- Mobil Menü ---------- */
