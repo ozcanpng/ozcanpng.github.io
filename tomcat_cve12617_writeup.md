@@ -2,7 +2,7 @@
 
 ## 1) Nmap Scan Report
 
-![Nmap Scan](Ekran%20Resmi%202025-07-04%2014.53.02.png)
+![Nmap Scan](https://github.com/ozcanpng/ozcanpng.github.io/blob/de7ed3f5bd2eec8bc5e91874681f4f33d2ee35c0/images/Ekran%20Resmi%202025-07-04%2014.53.02.png)
 
 ---
 
@@ -10,7 +10,7 @@
 
 Port 8080 üzerinde çalışan Apache Tomcat servisini ziyaret ediyoruz.
 
-![Apache Tomcat](Ekran%20Resmi%202025-07-04%2014.53.23%201.png)
+![Apache Tomcat](https://github.com/ozcanpng/ozcanpng.github.io/blob/de7ed3f5bd2eec8bc5e91874681f4f33d2ee35c0/images/Ekran%20Resmi%202025-07-04%2014.53.23%201.png)
 
 ---
 
@@ -18,7 +18,7 @@ Port 8080 üzerinde çalışan Apache Tomcat servisini ziyaret ediyoruz.
 
 Olası alt dizinleri görmek için directory scan gerçekleştiriyoruz.
 
-![Directory Scan](Ekran%20Resmi%202025-07-04%2015.01.49.png)
+![Directory Scan](https://github.com/ozcanpng/ozcanpng.github.io/blob/de7ed3f5bd2eec8bc5e91874681f4f33d2ee35c0/images/Ekran%20Resmi%202025-07-04%2015.01.49.png)
 
 ---
 
@@ -26,7 +26,7 @@ Olası alt dizinleri görmek için directory scan gerçekleştiriyoruz.
 
 Apache Tomcat 8.5.19 sürümünde, `readonly` parametresinin `false` olarak ayarlandığı durumlarda geçerli olan **CVE-2017-12617** zafiyeti bulunduğunu görüyoruz.
 
-![Zafiyet Bilgisi](Ekran%20Resmi%202025-07-04%2015.08.47.png)
+![Zafiyet Bilgisi](https://github.com/ozcanpng/ozcanpng.github.io/blob/de7ed3f5bd2eec8bc5e91874681f4f33d2ee35c0/images/Ekran%20Resmi%202025-07-04%2015.08.47.png)
 
 ---
 
@@ -34,7 +34,7 @@ Apache Tomcat 8.5.19 sürümünde, `readonly` parametresinin `false` olarak ayar
 
 Bu zafiyet için Metasploit içerisinde hazır bir exploit bulunmaktadır.
 
-![Metasploit](Ekran%20Resmi%202025-07-04%2015.10.26.png)
+![Metasploit](https://github.com/ozcanpng/ozcanpng.github.io/blob/de7ed3f5bd2eec8bc5e91874681f4f33d2ee35c0/images/Ekran%20Resmi%202025-07-04%2015.10.26.png)
 
 ---
 
@@ -42,7 +42,7 @@ Bu zafiyet için Metasploit içerisinde hazır bir exploit bulunmaktadır.
 
 Ben bu zafiyeti manuel olarak sömürmeyi ve `PUT` metodu ile `.jsp` uzantılı bir reverse shell dosyası yüklemeyi tercih ettim.
 
-![PUT Shell](Ekran%20Resmi%202025-07-04%2015.29.15.png)
+![PUT Shell](https://github.com/ozcanpng/ozcanpng.github.io/blob/de7ed3f5bd2eec8bc5e91874681f4f33d2ee35c0/images/Ekran%20Resmi%202025-07-04%2015.12.31.png)
 
 ---
 
@@ -50,7 +50,7 @@ Ben bu zafiyeti manuel olarak sömürmeyi ve `PUT` metodu ile `.jsp` uzantılı 
 
 İsteği gönderdikten sonra bir listener kurup `http://172.20.2.57:8080/shell.jsp` adresine gidiyoruz ve başarıyla shell erişimini sağlıyoruz.
 
-![Shell Access](Ekran%20Resmi%202025-07-04%2015.31.47.png)
+![Shell Access](https://github.com/ozcanpng/ozcanpng.github.io/blob/de7ed3f5bd2eec8bc5e91874681f4f33d2ee35c0/images/Ekran%20Resmi%202025-07-04%2015.31.47.png)
 
 ---
 
@@ -68,4 +68,4 @@ grep -Ri -A1 '<param-name>readonly</param-name>' /usr/local/tomcat | grep -i '<p
 
 Bütün `tomcat` dizinini tarayıp aradığımız parametreleri gösteren küçük bir bash scripti ile bulgularımızı doğruluyoruz.
 
-![Config Doğrulama](Ekran%20Resmi%202025-07-04%2014.51.18.png)
+![Config Doğrulama](https://github.com/ozcanpng/ozcanpng.github.io/blob/de7ed3f5bd2eec8bc5e91874681f4f33d2ee35c0/images/Ekran%20Resmi%202025-07-04%2014.51.18.png)
