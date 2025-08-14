@@ -327,4 +327,4 @@ Son olarak `/project` dizinine gidip kalan iki flag’i topladım:
 
   
 
-Bu senaryoda, başlangıçtaki temel port taramasından yola çıkarak FTP, NFS ve CMS zafiyetlerini zincir şeklinde kullanıp tam yetki (root) elde ettik. Adımların her biri, gerçek dünyadaki saldırı yüzeylerini anlamak açısından öğreticiydi. Umarım bu write‑up hem CTF çözenlere hem de sistemlerini güvence altına almak isteyenlere fayda sağlar.
+Zor olan bu senaryoda, başlangıçtaki temel port taramasından yola çıkarak FTP, NFS ve CMS zafiyetlerini zincir şeklinde kullanıp tam yetki (root) elde ettik. Adımların her biri, gerçek dünyadaki saldırı yüzeylerini anlamak açısından öğreticiydi. Umarım bu write‑up hem CTF çözenlere hem de sistemlerini güvence altına almak isteyenlere fayda sağlar.
