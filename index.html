@@ -29,6 +29,11 @@
       --content-padding: 3rem;
       --border-radius: 16px;
       --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      
+      /* Category Colors */
+      --ctf-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      --cve-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      --other-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     }
 
     /* Light theme - Daha göz yormayan versiyon */
@@ -45,6 +50,11 @@
       --border: rgba(79, 70, 229, .15);
       --shadow: 0 20px 40px rgba(49, 46, 129, .08);
       --hero-gradient: linear-gradient(135deg, rgba(79, 70, 229, .05) 0%, rgba(49, 46, 129, .05) 100%);
+      
+      /* Light theme category colors */
+      --ctf-gradient: linear-gradient(135deg, #059669 0%, #047857 100%);
+      --cve-gradient: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      --other-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     }
 
     * { 
@@ -501,10 +511,10 @@
     }
 
     @media (min-width: 769px) {
-  .mobile-menu-btn {
-    display: none !important;
-  }
-}
+      .mobile-menu-btn {
+        display: none !important;
+      }
+    }
 
     .mobile-menu-btn:hover {
       background: var(--bg-card-hover);
@@ -705,7 +715,161 @@
       border:1px solid rgba(168,85,247,.25);
     }
 
-    /* === WRITE-UP LIST === */
+    /* ================== WRITE-UP CARD GRID ================== */
+    .writeup-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 5rem;
+    }
+
+    .writeup-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+      min-height: 220px;
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+
+    .writeup-card.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .writeup-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--accent-gradient);
+      transform: scaleX(0);
+      transition: transform 0.5s ease;
+    }
+
+    .writeup-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      background: var(--bg-card-hover);
+      box-shadow: var(--shadow);
+      border-color: rgba(168, 85, 247, .5);
+    }
+
+    .writeup-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .writeup-title {
+      font-family: "JetBrains Mono", monospace;
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+
+    .writeup-description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .writeup-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: auto;
+    }
+
+    .writeup-tags {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .category-tag {
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-tag.ctf {
+      background: var(--ctf-gradient);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, .3);
+    }
+
+    .category-tag.cve {
+      background: var(--cve-gradient);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, .3);
+    }
+
+    .category-tag.other {
+      background: var(--other-gradient);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, .3);
+    }
+
+    .difficulty-stars {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .star {
+      color: #fbbf24;
+      font-size: 1rem;
+      filter: drop-shadow(0 0 3px rgba(251, 191, 36, .5));
+    }
+
+    .star.empty {
+      color: var(--text-secondary);
+      opacity: 0.3;
+    }
+
+    .writeup-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .writeup-date {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .read-time {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      opacity: 0.8;
+    }
+
+    /* ================== LEGACY WRITE-UP LIST (fallback) ================== */
     .writeup-list {
       list-style:none; 
       display:flex; 
@@ -834,7 +998,8 @@
     .footer-links {
       display: flex;
       justify-content: center;
-      gap: 2.5rem;
+      align-items: center;
+      gap: 1rem;
       margin-bottom: 1.5rem;
       flex-wrap: wrap;
     }
@@ -844,11 +1009,20 @@
       text-decoration: none;
       transition: var(--transition-smooth);
       font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
     }
     
     .footer-links a:hover {
       color: var(--accent-primary);
       transform: translateY(-2px);
+    }
+
+    .footer-separator {
+      color: var(--border);
+      font-weight: 300;
+      opacity: 0.7;
     }
     
     .loading {
@@ -927,6 +1101,11 @@
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         gap: 3rem;
       }
+
+      .writeup-grid {
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 3rem;
+      }
     }
     
     /* Desktop */
@@ -938,6 +1117,10 @@
       
       .repo-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+
+      .writeup-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       }
     }
     
@@ -958,6 +1141,11 @@
       
       .repo-grid {
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 2rem;
+      }
+
+      .writeup-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 2rem;
       }
       
@@ -1017,10 +1205,20 @@
         grid-template-columns: 1fr;
         gap: 1.5rem;
       }
+
+      .writeup-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
       
       .repo-card {
         min-height: 160px;
         padding: 2rem;
+      }
+
+      .writeup-card {
+        min-height: 200px;
+        padding: 1.5rem;
       }
       
       .writeup-link {
@@ -1044,8 +1242,9 @@
       }
       
       .footer-links {
-        flex-direction: column;
-        gap: 1.5rem;
+        flex-direction: row;
+        gap: 0.8rem;
+        justify-content: center;
       }
       
       .search-box {
@@ -1111,6 +1310,17 @@
         padding: 1.5rem;
         border-radius: 16px;
       }
+
+      .writeup-card {
+        padding: 1.3rem;
+        border-radius: 16px;
+        min-height: 180px;
+      }
+
+      .writeup-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
       
       .writeup-link {
         padding: 1.2rem 1.5rem;
@@ -1140,12 +1350,35 @@
         left: 1rem;
         top: 1rem;
       }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .footer-separator {
+        display: none;
+      }
+
+      .writeup-tags {
+        gap: 0.5rem;
+      }
+
+      .category-tag {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.7rem;
+      }
     }
     
     /* Small Mobile */
     @media (max-width: 360px) {
       .repo-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .writeup-grid {
         gap: 1rem;
       }
       
@@ -1165,6 +1398,19 @@
       .social-link {
         width: 40px;
         height: 40px;
+      }
+
+      .writeup-card {
+        padding: 1rem;
+        min-height: 160px;
+      }
+
+      .writeup-title {
+        font-size: 1rem;
+      }
+
+      .writeup-description {
+        font-size: 0.9rem;
       }
     }
 
@@ -1186,6 +1432,7 @@
     /* === HOVER STATES OPTIMIZATION === */
     @media (hover: hover) and (pointer: fine) {
       .repo-card:hover,
+      .writeup-card:hover,
       .writeup-link:hover,
       .nav-item:hover,
       .social-link:hover,
@@ -1235,6 +1482,7 @@
 
     /* === PERFORMANCE OPTIMIZATIONS === */
     .repo-card,
+    .writeup-card,
     .writeup-link,
     .nav-item {
       will-change: transform;
@@ -1314,35 +1562,35 @@
       </div>
     </div>
 
-<footer>
-  <div class="footer-links">
-    <a href="mailto:ozcan.ersan@outlook.com">📧 İletişim</a>
-    <span>|</span>
-    <span id="visitor-count-footer">👁️ 0 ziyaret</span>
-    <span>|</span>
-    <a href="https://github.com/ozcanpng" target="_blank" style="display:inline-flex;align-items:center;gap:6px;">
-      <!-- GitHub SVG ikonu -->
-      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387
-                 .599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416
-                 -4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745
-                 .083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237
-                 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604
-                 -2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381
-                 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322
-                 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138
-                 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242
-                 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807
-                 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 
-                 .319.192.694.801.576C20.562 21.8 24 17.302 24 
-                 12c0-6.627-5.373-12-12-12z"/>
-      </svg>
-      GitHub
-    </a>
-  </div>
-  &copy; 2025 ozcanpng | Projeler &amp; CTF Write-Up
-</footer>
-
+    <footer>
+      <div class="footer-links">
+        <a href="mailto:ozcan.ersan@outlook.com">
+          <span>📧</span> İletişim
+        </a>
+        <span class="footer-separator">|</span>
+        <span id="visitor-count-footer">👁️ 0 ziyaret</span>
+        <span class="footer-separator">|</span>
+        <a href="https://github.com/ozcanpng" target="_blank">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387
+                     .599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416
+                     -4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745
+                     .083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237
+                     1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604
+                     -2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381
+                     1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322
+                     3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138
+                     3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242
+                     2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807
+                     5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 
+                     .319.192.694.801.576C20.562 21.8 24 17.302 24 
+                     12c0-6.627-5.373-12-12-12z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
+      &copy; 2025 ozcanpng | Projeler &amp; CTF Write-Up
+    </footer>
   </main>
 
   <!-- ===== JS KIT ===== -->
@@ -1491,10 +1739,12 @@ function initSearch() {
     
     searchTimeout = setTimeout(() => {
       const query = e.target.value.toLowerCase().trim();
-      const items = document.querySelectorAll('.writeup-item, .repo-card');
+      const repoItems = document.querySelectorAll('.repo-card');
+      const writeupItems = document.querySelectorAll('.writeup-card, .writeup-item');
+      const allItems = [...repoItems, ...writeupItems];
       let visibleCount = 0;
       
-      items.forEach((item, index) => {
+      allItems.forEach((item, index) => {
         const text = item.textContent.toLowerCase();
         const shouldShow = !query || text.includes(query);
         
@@ -1592,7 +1842,7 @@ function lazyRevealRepos() {
 }
 
 function lazyRevealWriteups() {
-  const items = document.querySelectorAll('.writeup-item');
+  const items = document.querySelectorAll('.writeup-card, .writeup-item');
   if (!items.length) return;
   
   const observer = createIntersectionObserver((entries) => {
@@ -1701,19 +1951,298 @@ async function listMarkdownFiles() {
     if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
     
     const files = await res.json();
-    return files
-      .filter(f => f.name.endsWith(".md") && f.name !== "README.md")
-      .map(f => ({
-        name: f.name.replace(".md", ""),
-        created: f.name // Sort by name as creation proxy
-      }))
-      .sort((a, b) => b.created.localeCompare(a.created)); // Sort by name descending (newest first)
+    const mdFiles = files.filter(f => f.name.endsWith(".md") && f.name !== "README.md");
+    
+    // Her dosya için ilk commit tarihi al
+    const filesWithDates = await Promise.all(mdFiles.map(async (file) => {
+      try {
+        const commitRes = await fetch(`https://api.github.com/repos/${username}/${repo}/commits?path=${file.name}&per_page=100`, {
+          headers: { 'Accept': 'application/vnd.github.v3+json' }
+        });
+        
+        if (commitRes.ok) {
+          const commits = await commitRes.json();
+          const firstCommit = commits[commits.length - 1]; // Son eleman = ilk commit
+          return {
+            name: file.name.replace(".md", ""),
+            firstCommitDate: firstCommit ? new Date(firstCommit.commit.author.date) : new Date(),
+            sha: file.sha
+          };
+        }
+        
+        return {
+          name: file.name.replace(".md", ""),
+          firstCommitDate: new Date(),
+          sha: file.sha
+        };
+      } catch (e) {
+        console.warn(`${file.name} commit geçmişi alınamadı:`, e);
+        return {
+          name: file.name.replace(".md", ""),
+          firstCommitDate: new Date(),
+          sha: file.sha
+        };
+      }
+    }));
+    
+    // İlk commit tarihine göre sırala (en yeni üstte)
+    return filesWithDates.sort((a, b) => b.firstCommitDate - a.firstCommitDate);
+    
   } catch (e) {
     console.error("Markdown dosyaları alınamadı:", e);
     return [];
   }
 }
 
+/* ---------- Gelişmiş Okuma Süresi Hesaplama ---------- */
+function calculateReadingTime(content) {
+  if (!content || content.trim().length === 0) {
+    return '3 min'; // Varsayılan
+  }
+
+  try {
+    // 1. Code block'ları özel olarak işle (daha yavaş okunur)
+    const codeBlockMatches = content.match(/```[\s\S]*?```/g) || [];
+    const codeLineCount = codeBlockMatches.reduce((total, block) => {
+      return total + (block.split('\n').length - 2); // ``` satırlarını çıkar
+    }, 0);
+
+    // 2. Inline code parçalarını say
+    const inlineCodeMatches = content.match(/`[^`\n]+`/g) || [];
+    const inlineCodeCount = inlineCodeMatches.length;
+
+    // 3. Görsel içerikleri say (resim, diagram vs)
+    const imageMatches = content.match(/!\[.*?\]\(.*?\)/g) || [];
+    const imageCount = imageMatches.length;
+
+    // 4. Markdown'ı temizle ve gerçek metin içeriğini al
+    let cleanText = content
+      // Code block'ları kaldır
+      .replace(/```[\s\S]*?```/g, '')
+      // Inline code'ları kaldır
+      .replace(/`[^`\n]+`/g, '')
+      // Resim linklerini kaldır
+      .replace(/!\[.*?\]\(.*?\)/g, '')
+      // Normal linkleri sadece metin kısmını bırak
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      // Başlık işaretlerini kaldır
+      .replace(/^#{1,6}\s+/gm, '')
+      // Kalın/italik işaretlerini kaldır
+      .replace(/\*{1,3}([^*]+)\*{1,3}/g, '$1')
+      .replace(/_{1,3}([^_]+)_{1,3}/g, '$1')
+      // Liste işaretlerini kaldır
+      .replace(/^[\s]*[-*+]\s+/gm, '')
+      .replace(/^[\s]*\d+\.\s+/gm, '')
+      // Quote işaretlerini kaldır
+      .replace(/^>\s+/gm, '')
+      // Horizontal rule'ları kaldır
+      .replace(/^---+$/gm, '')
+      // HTML tag'lerini kaldır (eğer varsa)
+      .replace(/<[^>]*>/g, '')
+      // Çoklu boşlukları tekile indir
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    // 5. Kelime sayısını hesapla (Türkçe ve İngilizce uyumlu)
+    const words = cleanText.split(/\s+/).filter(word => {
+      // Boş stringler ve sadece noktalama işaretlerini filtrele
+      return word.length > 0 && /[a-zA-ZğüşıöçĞÜŞİÖÇ]/.test(word);
+    });
+    
+    const wordCount = words.length;
+
+    // 6. Farklı içerik tiplerini hesaba kat
+    let totalReadingTime = 0;
+
+    // Normal metin: 180 kelime/dakika (Türkçe için biraz daha yavaş)
+    const textReadingSpeed = 180; // kelime/dakika
+    totalReadingTime += wordCount / textReadingSpeed;
+
+    // Code satırları: 30 satır/dakika (kod okumak daha yavaş)
+    if (codeLineCount > 0) {
+      totalReadingTime += codeLineCount / 30;
+    }
+
+    // Inline code parçaları: her biri 3 saniye
+    if (inlineCodeCount > 0) {
+      totalReadingTime += (inlineCodeCount * 3) / 60; // saniye -> dakika
+    }
+
+    // Resimler: her biri 10 saniye
+    if (imageCount > 0) {
+      totalReadingTime += (imageCount * 10) / 60; // saniye -> dakika
+    }
+
+    // 7. Sonucu dakikaya yuvarla
+    let minutes = Math.round(totalReadingTime);
+    
+    // Minimum 1 dakika, maksimum 30 dakika
+    minutes = Math.max(1, Math.min(30, minutes));
+
+    // 8. Türkçe format döndür
+    return minutes + ' min';
+
+  } catch (error) {
+    console.warn('Okuma süresi hesaplama hatası:', error);
+    return '3 min'; // Hata durumunda varsayılan
+  }
+}
+
+/* ---------- Parse Write-up Metadata ---------- */
+async function parseWriteupMetadata(filename, fileContent = null) {
+  // Default metadata
+  const metadata = {
+    category: 'other',
+    difficulty: 3,
+    date: new Date().toLocaleDateString('tr-TR'),
+    readTime: '5 min',
+    description: 'Cyber security write-up'
+  };
+
+  try {
+    // Dosya içeriğini al (eğer yoksa)
+    let content = fileContent;
+    if (!content) {
+      const contentRes = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/${filename}.md`);
+      if (contentRes.ok) {
+        content = await contentRes.text();
+      }
+    }
+
+    // Filename ve content analysis
+    const lowerName = filename.toLowerCase();
+    const lowerContent = content ? content.toLowerCase() : '';
+
+    // Kategori tespiti - geliştirilmiş algoritma
+    if (lowerName.includes('ctf') || 
+        lowerName.includes('hackviser') || 
+        lowerName.includes('tryhackme') || 
+        lowerName.includes('thm') || 
+        lowerName.includes('htb') ||
+        lowerContent.includes('ctf') ||
+        lowerContent.includes('hackviser') ||
+        lowerContent.includes('tryhackme') ||
+        lowerContent.includes('hackthebox')) {
+      metadata.category = 'ctf';
+      metadata.description = 'CTF challenge write-up';
+    } else if (lowerName.includes('cve') || 
+               lowerName.includes('exploit') || 
+               lowerName.includes('vulnerability') ||
+               lowerContent.includes('cve-') ||
+               lowerContent.includes('zafiyet')) {
+      metadata.category = 'cve';
+      metadata.description = 'Vulnerability analysis and exploitation';
+    }
+
+    // Zorluk seviyesi tespiti - Türkçe ve İnglizce
+    if (content) {
+      if (content.includes('Temel Düzey') || content.includes('Beginner')) {
+        metadata.difficulty = 1;
+      } else if (content.includes('Kolay') || content.includes('Easy')) {
+        metadata.difficulty = 2;
+      } else if (content.includes('Orta') || content.includes('Medium')) {
+        metadata.difficulty = 3;
+      } else if (content.includes('Zor') || content.includes('Hard')) {
+        metadata.difficulty = 4;
+      } else if (content.includes('Çok Zor') || content.includes('Very Hard') || content.includes('Insane')) {
+        metadata.difficulty = 5;
+      }
+    }
+
+    // ✨ YENİ: Gelişmiş okuma süresi hesaplama
+    if (content) {
+      metadata.readTime = calculateReadingTime(content);
+    }
+
+    return metadata;
+  } catch (error) {
+    console.warn(`Metadata parsing failed for ${filename}:`, error);
+    return metadata;
+  }
+}
+
+/* ---------- Generate Write-up Cards ---------- */
+async function generateWriteupCards(writeups) {
+  if (writeups.length === 0) {
+    return `
+      <div class="writeup-card" style="grid-column: 1/-1; text-align: center; min-height: 200px; display: flex; align-items: center; justify-content: center;">
+        <div>
+          <h3 style="color: var(--text-secondary); margin-bottom: 1rem;"> Henüz write-up yayınlanmadı</h3>
+          <p style="color: var(--text-secondary);">Yakında harika içerikler gelecek!</p>
+        </div>
+      </div>
+    `;
+  }
+
+  // Her writeup için metadata'yı paralel olarak al
+  const writeupCards = await Promise.all(writeups.map(async (file, index) => {
+    try {
+      const meta = await parseWriteupMetadata(file.name);
+      
+      // İlk commit tarihini kullan
+      meta.date = file.firstCommitDate.toLocaleDateString('tr-TR');
+      
+      const stars = Array.from({ length: 5 }, (_, i) => 
+        `<span class="star ${i < meta.difficulty ? '' : 'empty'}">★</span>`
+      ).join('');
+
+      return `
+        <div class="writeup-card" style="animation-delay: ${index * 100}ms;">
+          <a href="#post=${file.name}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
+            <div class="writeup-title">${file.name}</div>
+            <div class="writeup-description">${meta.description}</div>
+            <div class="writeup-meta">
+              <div class="writeup-tags">
+                <span class="category-tag ${meta.category}">${meta.category.toUpperCase()}</span>
+                <div class="difficulty-stars">${stars}</div>
+              </div>
+              <div class="writeup-footer">
+                <div class="writeup-date">
+                  <span>📅</span>
+                  <span>${meta.date}</span>
+                </div>
+                <div class="read-time">
+                  <span>⏱️</span>
+                  <span>${meta.readTime}</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      `;
+    } catch (error) {
+      console.warn(`Writeup card generation failed for ${file.name}:`, error);
+      
+      // Fallback card
+      return `
+        <div class="writeup-card" style="animation-delay: ${index * 100}ms;">
+          <a href="#post=${file.name}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
+            <div class="writeup-title">${file.name}</div>
+            <div class="writeup-description">Cyber security write-up</div>
+            <div class="writeup-meta">
+              <div class="writeup-tags">
+                <span class="category-tag other">OTHER</span>
+                <div class="difficulty-stars">★★★☆☆</div>
+              </div>
+              <div class="writeup-footer">
+                <div class="writeup-date">
+                  <span>📅</span>
+                  <span>${file.firstCommitDate.toLocaleDateString('tr-TR')}</span>
+                </div>
+                <div class="read-time">
+                  <span>⏱️</span>
+                  <span>5 min</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      `;
+    }
+  }));
+
+  return writeupCards.join('');
+}
 /* ---------- Enhanced POST Loading ---------- */
 async function loadMarkdownPost(name) {
   const content = document.getElementById('content');
@@ -1801,27 +2330,19 @@ const routes = {
         listMarkdownFiles()
       ]);
 
-      const writeupHTML = writeups.length > 0 
-        ? writeups.map(file => `
-            <li class="writeup-item">
-              <a href="#post=${file.name}" class="writeup-link">
-                📌 ${file.name}
-              </a>
-            </li>
-          `).join('')
-        : '<li class="writeup-item"><div style="text-align:center;padding:2rem;color:var(--text-secondary);">📝 Henüz write-up yayınlanmadı</div></li>';
+      const writeupHTML = await generateWriteupCards(writeups);
 
       content.innerHTML = `
         <div class="search-container">
           <input type="text" class="search-box" id="search-box" placeholder="🔍 Search..." autocomplete="off">
-          <div class="search-icon"></div>
+          <div class="search-icon">🔍</div>
         </div>
 
-        <div class="section-title lazy-element"> GitHub Project </div>
+        <div class="section-title lazy-element"> GitHub Projects</div>
         <div class="repo-grid">${repoHTML}</div>
 
-        <div class="section-title lazy-element"> CTFs & CVEs Write-Ups </div>
-        <ul class="writeup-list">${writeupHTML}</ul>
+        <div class="section-title lazy-element"> CTFs & CVEs Write-Ups</div>
+        <div class="writeup-grid">${writeupHTML}</div>
       `;
 
       document.title = 'ozcanpng | Ana Sayfa';
@@ -1849,24 +2370,21 @@ const routes = {
     }
   },
 
-about: () => {
-  document.getElementById('content').innerHTML = 
-    `<div class="lazy-wrapper">
-      <div class="section-title lazy-child"> About Me </div>
-      <div class="about-card lazy-child">
-        <p>Hello! I'm <span class="about-highlight">Özcan</span>, a <span class="about-highlight">4th-year Computer Engineering student</span>. I am actively receiving training under the <span class="about-highlight">Siber Vatan</span> program and working towards specializing in <span class="about-highlight">cybersecurity</span>.</p>
+  about: () => {
+    document.getElementById('content').innerHTML = 
+      `<div class="lazy-wrapper">
+        <div class="section-title lazy-child">👨‍💻 About Me</div>
+        <div class="about-card lazy-child">
+          <p>Hello! I'm <span class="about-highlight">Özcan</span>, a <span class="about-highlight">4th-year Computer Engineering student</span>. I am actively receiving training under the <span class="about-highlight">Siber Vatan</span> program and working towards specializing in <span class="about-highlight">cybersecurity</span>.</p>
 
-        <p>My main focus areas are <span class="about-highlight">Web Application Security</span> and <span class="about-highlight">penetration testing</span>. I also have a strong interest in <span class="about-highlight">malware development</span> and regularly solve <span class="about-highlight">CTF challenges</span> to sharpen my skills.</p>
+          <p>My main focus areas are <span class="about-highlight">Web Application Security</span> and <span class="about-highlight">penetration testing</span>. I also have a strong interest in <span class="about-highlight">malware development</span> and regularly solve <span class="about-highlight">CTF challenges</span> to sharpen my skills.</p>
 
-        <p>In my own lab environment, I conduct <span class="about-highlight">technical experiments</span>, explore real-world vulnerabilities, and share my findings through <span class="about-highlight">detailed write-ups</span>.</p>
-      </div>
-    </div>`;
-  document.title = 'ozcanpng | About Me';
-  setTimeout(() => lazyRevealGroup(), 100);
-}
-
-
-
+          <p>In my own lab environment, I conduct <span class="about-highlight">technical experiments</span>, explore real-world vulnerabilities, and share my findings through <span class="about-highlight">detailed write-ups</span>.</p>
+        </div>
+      </div>`;
+    document.title = 'ozcanpng | About Me';
+    setTimeout(() => lazyRevealGroup(), 100);
+  }
 };
 
 /* ---------- 404 Helper ---------- */
@@ -2075,3 +2593,4 @@ if ('serviceWorker' in navigator) {
   </script>
 </body>
 </html>
+      
