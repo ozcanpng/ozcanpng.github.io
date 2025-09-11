@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
 
   <style>
-    /* ================== TEMEL TEMA ================== */
+    /* ================== CORE THEME ================== */
     :root {
       --bg-primary: #0a0a0f;
       --bg-secondary: #151520;
@@ -36,7 +36,7 @@
       --other-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     }
 
-    /* Light theme - Daha göz yormayan versiyon */
+    /* Light theme - less eye-straining version */
     .light-theme {
       --bg-primary: #fafbfc;
       --bg-secondary: #ffffff;
@@ -225,7 +225,7 @@
       color: var(--accent-primary);
     }
 
-    /* ================== ARKA PLAN PARÇACIK ================== */
+    /* ================== BACKGROUND PARTICLES ================== */
     .bg-particles {
       position: fixed; 
       inset: 0; 
@@ -352,7 +352,7 @@
       max-width: 250px;
     }
 
-    /* ================== SOSYAL MEDYA ================== */
+    /* ================== SOCIAL MEDIA ================== */
     .social-links { 
       display:flex; 
       gap:1.2rem; 
@@ -1511,17 +1511,17 @@
   <!-- ===== SIDEBAR ===== -->
   <aside>
     <div class="profile-section">
-      <div class="profile-image"><img src="https://github.com/ozcanpng.png" alt="Profil Resmi"></div>
+      <div class="profile-image"><img src="https://github.com/ozcanpng.png" alt="Profile Picture"></div>
       <h2 class="profile-name">@ozcanpng</h2>
       <p class="profile-title">Offensive Security</p>
 
-      <!-- VISİTOR COUNTER -->
+      <!-- VISITOR COUNTER -->
       <div class="visitor-counter">
         <span>👁️ Visitor:</span>
         <span class="count" id="visitor-count">0</span>
       </div>
 
-      <!-- SOSYAL MEDYA -->
+      <!-- SOCIAL MEDIA -->
       <div class="social-links">
         <a href="https://github.com/ozcanpng" target="_blank" class="social-link github" title="GitHub">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
@@ -1542,10 +1542,10 @@
     </nav>
   </aside>
 
-  <!-- ===== ANA İÇERİK ===== -->
+  <!-- ===== MAIN CONTENT ===== -->
   <main>
-    <!-- Mobil hamburger -->
-    <button id="mobile-menu-btn" aria-label="Menü" class="mobile-menu-btn">
+    <!-- Mobile menu button -->
+    <button id="mobile-menu-btn" aria-label="Menu" class="mobile-menu-btn">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
 
@@ -1558,17 +1558,17 @@
 
     <div class="content-area">
       <div id="content" class="markdown-body">
-        <div class="loading">İçerik yükleniyor</div>
+        <div class="loading">Content Loading</div>
       </div>
     </div>
 
     <footer>
       <div class="footer-links">
         <a href="mailto:ozcan.ersan@outlook.com">
-          <span>📧</span> İletişim
+          <span>📧</span> Contact
         </a>
         <span class="footer-separator">|</span>
-        <span id="visitor-count-footer">👁️ 0 ziyaret</span>
+        <span id="visitor-count-footer">👁️ 0 Visitors</span>
         <span class="footer-separator">|</span>
         <a href="https://github.com/ozcanpng" target="_blank">
           <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
@@ -1705,7 +1705,7 @@ async function loadVisitorCount() {
           const data = await res.json();
           if (data.value) {
             document.getElementById('visitor-count').textContent = data.value;
-            document.getElementById('visitor-count-footer').textContent = `👁️ ${data.value} ziyaret`;
+            document.getElementById('visitor-count-footer').textContent = `👁️ ${data.value} visits`;
             success = true;
             break;
           }
@@ -1721,9 +1721,9 @@ async function loadVisitorCount() {
     }
     
   } catch (e) {
-    console.error('Visitor count yüklenemedi:', e);
+    console.error('Visitor count failed to load:', e);
     document.getElementById('visitor-count').textContent = defaultCount;
-    document.getElementById('visitor-count-footer').textContent = `👁️ ${defaultCount} ziyaret`;
+    document.getElementById('visitor-count-footer').textContent = `👁️ ${defaultCount} visits`;
   }
 }
 
@@ -1923,18 +1923,18 @@ async function listRepos() {
             ${r.language ? `💻 ${r.language}` : '📁 Repository'}
             ${r.stargazers_count ? ` • ⭐ ${r.stargazers_count}` : ''}
             ${r.forks_count ? ` • 🔄 ${r.forks_count}` : ''}
-            ${r.created_at ? ` • 📅 ${new Date(r.created_at).toLocaleDateString('tr-TR')}` : ''}
+            ${r.created_at ? ` • 📅 ${new Date(r.created_at).toLocaleDateString('en-US')}` : ''}
           </div>
         </a>
       </div>
     `).join('');
   } catch (e) {
-    console.error('Repos yüklenemedi:', e);
+    console.error('Repositories failed to load:', e);
     return `
       <div class="repo-card">
-        <h3 style="color:var(--text-secondary);">⚠️ Projeler Yüklenemedi</h3>
-        <p style="color:var(--text-secondary);margin:1rem 0;">GitHub API'ye erişilemiyor. Lütfen daha sonra tekrar deneyin.</p>
-        <div class="repo-meta">🔄 Yeniden yükleniyor...</div>
+        <h3 style="color:var(--text-secondary);">⚠️ Projects Failed to Load</h3>
+        <p style="color:var(--text-secondary);margin:1rem 0;">Too many requests, GitHub API is unavailable. Please try again later.</p>
+        <div class="repo-meta">🔄 Loading Again...</div>
       </div>`;
   }
 }
@@ -1953,7 +1953,7 @@ async function listMarkdownFiles() {
     const files = await res.json();
     const mdFiles = files.filter(f => f.name.endsWith(".md") && f.name !== "README.md");
     
-    // Her dosya için ilk commit tarihi al
+    // Get first commit date for each file
     const filesWithDates = await Promise.all(mdFiles.map(async (file) => {
       try {
         const commitRes = await fetch(`https://api.github.com/repos/${username}/${repo}/commits?path=${file.name}&per_page=100`, {
@@ -1962,7 +1962,7 @@ async function listMarkdownFiles() {
         
         if (commitRes.ok) {
           const commits = await commitRes.json();
-          const firstCommit = commits[commits.length - 1]; // Son eleman = ilk commit
+          const firstCommit = commits[commits.length - 1]; // Last element = first commit
           return {
             name: file.name.replace(".md", ""),
             firstCommitDate: firstCommit ? new Date(firstCommit.commit.author.date) : new Date(),
@@ -1976,7 +1976,7 @@ async function listMarkdownFiles() {
           sha: file.sha
         };
       } catch (e) {
-        console.warn(`${file.name} commit geçmişi alınamadı:`, e);
+        console.warn(`${file.name} commit history could not be retrieved:`, e);
         return {
           name: file.name.replace(".md", ""),
           firstCommitDate: new Date(),
@@ -1985,106 +1985,94 @@ async function listMarkdownFiles() {
       }
     }));
     
-    // İlk commit tarihine göre sırala (en yeni üstte)
+    // Sort by first commit date (newest first)
     return filesWithDates.sort((a, b) => b.firstCommitDate - a.firstCommitDate);
     
   } catch (e) {
-    console.error("Markdown dosyaları alınamadı:", e);
+    console.error("Markdown files could not be retrieved:", e);
     return [];
   }
 }
 
-/* ---------- Gelişmiş Okuma Süresi Hesaplama ---------- */
+/* ---------- Advanced Reading Time Calculation ---------- */
 function calculateReadingTime(content) {
   if (!content || content.trim().length === 0) {
-    return '3 min'; // Varsayılan
+    return '3 min'; // Default
   }
 
   try {
-    // 1. Code block'ları özel olarak işle (daha yavaş okunur)
+    // 1. Process code blocks specially (slower to read)
     const codeBlockMatches = content.match(/```[\s\S]*?```/g) || [];
     const codeLineCount = codeBlockMatches.reduce((total, block) => {
-      return total + (block.split('\n').length - 2); // ``` satırlarını çıkar
+      return total + (block.split('\n').length - 2); // remove ``` lines
     }, 0);
 
-    // 2. Inline code parçalarını say
+    // 2. Count inline code segments
     const inlineCodeMatches = content.match(/`[^`\n]+`/g) || [];
     const inlineCodeCount = inlineCodeMatches.length;
 
-    // 3. Görsel içerikleri say (resim, diagram vs)
+    // 3. Count images/diagrams
     const imageMatches = content.match(/!\[.*?\]\(.*?\)/g) || [];
     const imageCount = imageMatches.length;
 
-    // 4. Markdown'ı temizle ve gerçek metin içeriğini al
+    // 4. Clean markdown to get text content
     let cleanText = content
-      // Code block'ları kaldır
       .replace(/```[\s\S]*?```/g, '')
-      // Inline code'ları kaldır
       .replace(/`[^`\n]+`/g, '')
-      // Resim linklerini kaldır
       .replace(/!\[.*?\]\(.*?\)/g, '')
-      // Normal linkleri sadece metin kısmını bırak
       .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-      // Başlık işaretlerini kaldır
       .replace(/^#{1,6}\s+/gm, '')
-      // Kalın/italik işaretlerini kaldır
       .replace(/\*{1,3}([^*]+)\*{1,3}/g, '$1')
       .replace(/_{1,3}([^_]+)_{1,3}/g, '$1')
-      // Liste işaretlerini kaldır
       .replace(/^[\s]*[-*+]\s+/gm, '')
       .replace(/^[\s]*\d+\.\s+/gm, '')
-      // Quote işaretlerini kaldır
       .replace(/^>\s+/gm, '')
-      // Horizontal rule'ları kaldır
       .replace(/^---+$/gm, '')
-      // HTML tag'lerini kaldır (eğer varsa)
       .replace(/<[^>]*>/g, '')
-      // Çoklu boşlukları tekile indir
       .replace(/\s+/g, ' ')
       .trim();
 
-    // 5. Kelime sayısını hesapla (Türkçe ve İngilizce uyumlu)
+    // 5. Word count (TR/EN friendly)
     const words = cleanText.split(/\s+/).filter(word => {
-      // Boş stringler ve sadece noktalama işaretlerini filtrele
       return word.length > 0 && /[a-zA-ZğüşıöçĞÜŞİÖÇ]/.test(word);
     });
     
     const wordCount = words.length;
 
-    // 6. Farklı içerik tiplerini hesaba kat
+    // 6. Account for different content types
     let totalReadingTime = 0;
 
-    // Normal metin: 180 kelime/dakika (Türkçe için biraz daha yavaş)
-    const textReadingSpeed = 180; // kelime/dakika
+    // Normal text: 180 wpm (a bit slower considering Turkish too)
+    const textReadingSpeed = 180; // words/min
     totalReadingTime += wordCount / textReadingSpeed;
 
-    // Code satırları: 30 satır/dakika (kod okumak daha yavaş)
+    // Code lines: 30 lines/min
     if (codeLineCount > 0) {
       totalReadingTime += codeLineCount / 30;
     }
 
-    // Inline code parçaları: her biri 3 saniye
+    // Inline code: 3 seconds each
     if (inlineCodeCount > 0) {
-      totalReadingTime += (inlineCodeCount * 3) / 60; // saniye -> dakika
+      totalReadingTime += (inlineCodeCount * 3) / 60; // sec -> min
     }
 
-    // Resimler: her biri 10 saniye
+    // Images: 10 seconds each
     if (imageCount > 0) {
-      totalReadingTime += (imageCount * 10) / 60; // saniye -> dakika
+      totalReadingTime += (imageCount * 10) / 60; // sec -> min
     }
 
-    // 7. Sonucu dakikaya yuvarla
+    // 7. Round to minutes
     let minutes = Math.round(totalReadingTime);
     
-    // Minimum 1 dakika, maksimum 30 dakika
+    // Min 1, max 30
     minutes = Math.max(1, Math.min(30, minutes));
 
-    // 8. Türkçe format döndür
+    // 8. Return English format
     return minutes + ' min';
 
   } catch (error) {
-    console.warn('Okuma süresi hesaplama hatası:', error);
-    return '3 min'; // Hata durumunda varsayılan
+    console.warn('Reading time calculation error:', error);
+    return '3 min'; // Default on error
   }
 }
 
@@ -2094,13 +2082,13 @@ async function parseWriteupMetadata(filename, fileContent = null) {
   const metadata = {
     category: 'other',
     difficulty: 3,
-    date: new Date().toLocaleDateString('tr-TR'),
+    date: new Date().toLocaleDateString('en-US'),
     readTime: '5 min',
     description: 'Cyber security write-up'
   };
 
   try {
-    // Dosya içeriğini al (eğer yoksa)
+    // Get file content if not provided
     let content = fileContent;
     if (!content) {
       const contentRes = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/${filename}.md`);
@@ -2109,11 +2097,11 @@ async function parseWriteupMetadata(filename, fileContent = null) {
       }
     }
 
-    // Filename ve content analysis
+    // Filename and content analysis
     const lowerName = filename.toLowerCase();
     const lowerContent = content ? content.toLowerCase() : '';
 
-    // Kategori tespiti - geliştirilmiş algoritma
+    // Category detection - improved
     if (lowerName.includes('ctf') || 
         lowerName.includes('hackviser') || 
         lowerName.includes('tryhackme') || 
@@ -2129,12 +2117,12 @@ async function parseWriteupMetadata(filename, fileContent = null) {
                lowerName.includes('exploit') || 
                lowerName.includes('vulnerability') ||
                lowerContent.includes('cve-') ||
-               lowerContent.includes('zafiyet')) {
+               lowerContent.includes('zafiyet')) { // includes Turkish synonym
       metadata.category = 'cve';
       metadata.description = 'Vulnerability analysis and exploitation';
     }
 
-    // Zorluk seviyesi tespiti - Türkçe ve İnglizce
+    // Difficulty detection - Turkish and English
     if (content) {
       if (content.includes('Temel Düzey') || content.includes('Beginner')) {
         metadata.difficulty = 1;
@@ -2149,7 +2137,7 @@ async function parseWriteupMetadata(filename, fileContent = null) {
       }
     }
 
-    // ✨ YENİ: Gelişmiş okuma süresi hesaplama
+    // Advanced reading time calculation
     if (content) {
       metadata.readTime = calculateReadingTime(content);
     }
@@ -2167,20 +2155,20 @@ async function generateWriteupCards(writeups) {
     return `
       <div class="writeup-card" style="grid-column: 1/-1; text-align: center; min-height: 200px; display: flex; align-items: center; justify-content: center;">
         <div>
-          <h3 style="color: var(--text-secondary); margin-bottom: 1rem;"> Henüz write-up yayınlanmadı</h3>
-          <p style="color: var(--text-secondary);">Yakında harika içerikler gelecek!</p>
+          <h3 style="color: var(--text-secondary); margin-bottom: 1rem;">No write-up has been published yet</h3>
+          <p style="color: var(--text-secondary);">Great content is coming soon!</p>
         </div>
       </div>
     `;
   }
 
-  // Her writeup için metadata'yı paralel olarak al
+  // Fetch metadata for each write-up in parallel
   const writeupCards = await Promise.all(writeups.map(async (file, index) => {
     try {
       const meta = await parseWriteupMetadata(file.name);
       
-      // İlk commit tarihini kullan
-      meta.date = file.firstCommitDate.toLocaleDateString('tr-TR');
+      // Use first commit date
+      meta.date = file.firstCommitDate.toLocaleDateString('en-US');
       
       const stars = Array.from({ length: 5 }, (_, i) => 
         `<span class="star ${i < meta.difficulty ? '' : 'empty'}">★</span>`
@@ -2227,7 +2215,7 @@ async function generateWriteupCards(writeups) {
               <div class="writeup-footer">
                 <div class="writeup-date">
                   <span>📅</span>
-                  <span>${file.firstCommitDate.toLocaleDateString('tr-TR')}</span>
+                  <span>${file.firstCommitDate.toLocaleDateString('en-US')}</span>
                 </div>
                 <div class="read-time">
                   <span>⏱️</span>
@@ -2246,7 +2234,7 @@ async function generateWriteupCards(writeups) {
 /* ---------- Enhanced POST Loading ---------- */
 async function loadMarkdownPost(name) {
   const content = document.getElementById('content');
-  content.innerHTML = '<div class="loading">Yazı yükleniyor</div>';
+  content.innerHTML = '<div class="loading">Content Loading</div>';
   
   try {
     const res = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/${name}.md`, {
@@ -2287,7 +2275,7 @@ async function loadMarkdownPost(name) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
   } catch (e) {
-    console.error('Markdown yüklenemedi:', e);
+    console.error('Markdown failed to load:', e);
     content.innerHTML = notFound();
   }
 }
@@ -2321,7 +2309,7 @@ const repo = "ozcanpng.github.io";
 const routes = {
   home: async () => {
     const content = document.getElementById('content');
-    content.innerHTML = '<div class="loading">Ana sayfa yükleniyor</div>';
+    content.innerHTML = '<div class="loading">Home page is loading</div>';
     
     try {
       // Load repos and writeups in parallel
@@ -2345,7 +2333,7 @@ const routes = {
         <div class="writeup-grid">${writeupHTML}</div>
       `;
 
-      document.title = 'ozcanpng | Ana Sayfa';
+      document.title = 'ozcanpng | Home Page';
       
       // Initialize features with delays for smooth loading
       setTimeout(() => {
@@ -2359,12 +2347,12 @@ const routes = {
       }, 300);
       
     } catch (error) {
-      console.error('Ana sayfa yüklenemedi:', error);
+      console.error('Home page failed to load:', error);
       content.innerHTML = `
         <div style="text-align:center;padding:3rem;color:var(--text-secondary);">
-          <h2>⚠️ İçerik Yüklenemedi</h2>
-          <p>Bir hata oluştu. Lütfen sayfayı yenileyin.</p>
-          <button onclick="routes.home()" style="margin-top:1rem;padding:0.8rem 1.5rem;background:var(--accent-primary);color:white;border:none;border-radius:8px;cursor:pointer;">🔄 Yeniden Dene</button>
+          <h2>⚠️ Content Failed to Load</h2>
+          <p>An error occurred. Please refresh the page.</p>
+          <button onclick="routes.home()" style="margin-top:1rem;padding:0.8rem 1.5rem;background:var(--accent-primary);color:white;border:none;border-radius:8px;cursor:pointer;">🔄 Try Again</button>
         </div>
       `;
     }
@@ -2392,8 +2380,8 @@ function notFound() {
   return `
     <div style="text-align:center;padding:4rem 2rem;color:var(--text-secondary);">
       <div style="font-size:4rem;margin-bottom:1rem;">🔍</div>
-      <h2 style="color:var(--text-primary);margin-bottom:1rem;font-size:2rem;">Sayfa Bulunamadı</h2>
-      <p style="margin-bottom:2rem;font-size:1.1rem;">Aradığınız içerik mevcut değil veya taşınmış olabilir.</p>
+      <h2 style="color:var(--text-primary);margin-bottom:1rem;font-size:2rem;">Page Not Found</h2>
+      <p style="margin-bottom:2rem;font-size:1.1rem;">The content you are looking for does not exist or may have been moved.</p>
       <a href="#home" style="
         display:inline-flex;
         align-items:center;
@@ -2407,7 +2395,7 @@ function notFound() {
         transition:var(--transition-smooth);
         font-weight:600;
       " onmouseover="this.style.background='var(--bg-card-hover)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='var(--bg-card)';this.style.transform='translateY(0)'">
-        ← Ana Sayfaya Dön
+        ← Back to Home Page
       </a>
     </div>
   `;
@@ -2593,4 +2581,3 @@ if ('serviceWorker' in navigator) {
   </script>
 </body>
 </html>
-      
