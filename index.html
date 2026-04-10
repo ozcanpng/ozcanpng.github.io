@@ -12,6 +12,8 @@
   <meta property="og:url" content="https://ozcanpng.dev/" />
   <meta name="twitter:card" content="summary" />
   <link rel="canonical" href="https://ozcanpng.dev/" />
+  <link rel="icon" type="image/png" href="https://github.com/ozcanpng.png" />
+  <link rel="apple-touch-icon" href="https://github.com/ozcanpng.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -644,7 +646,7 @@ async function getPosts() {
   const k = 'gh_posts_v3';
   const c = getCache(k, 1800000);
   if (c) return c;
-  const files = await ghGet(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents`);
+  const files = await ghGet(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/posts`);
   const mds = files.filter(f => f.name.endsWith('.md') && f.name !== 'README.md');
   const posts = await Promise.all(mds.map(async f => {
     const name = f.name.replace('.md','');
@@ -685,7 +687,7 @@ async function getMeta(name) {
   if (c) return c;
   const cfg = POST_CONFIG[name];
   try {
-    const res = await fetch(`https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/${name}.md`);
+    const res = await fetch(`https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/posts/${name}.md`);
     const text = res.ok ? await res.text() : '';
     const m = {
       category: cfg ? cfg.tag : detectCat(name, text),
@@ -888,12 +890,12 @@ const routes = {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     try {
-      const res = await fetch(`https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/${name}.md`);
+      const res = await fetch(`https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/posts/${name}.md`);
       if (!res.ok) throw new Error(res.status);
       let md = await res.text();
       md = md.replaceAll(
-        `https://github.com/${GH_USER}/${GH_REPO}/blob/main/`,
-        `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/`
+        `https://github.com/${GH_USER}/${GH_REPO}/blob/main/posts/`,
+        `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/posts/`
       );
       const meta = await getMeta(name);
       const posts = await getPosts().catch(() => []);
