@@ -14,6 +14,24 @@
   <link rel="canonical" href="https://ozcanpng.dev/" />
   <link rel="icon" type="image/png" href="https://github.com/ozcanpng.png" />
   <link rel="apple-touch-icon" href="https://github.com/ozcanpng.png" />
+  <link rel="alternate" type="application/rss+xml" title="ozcanpng RSS" href="/feed.xml" />
+  <meta name="theme-color" content="#a855f7" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Özcan Ersan",
+    "url": "https://ozcanpng.dev",
+    "image": "https://github.com/ozcanpng.png",
+    "jobTitle": "Offensive Security Researcher",
+    "description": "4th-year Computer Engineering student. Penetration tester, CTF player, and vulnerability researcher.",
+    "sameAs": [
+      "https://github.com/ozcanpng",
+      "https://linkedin.com/in/özcanersan"
+    ]
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,6 +53,7 @@
       --ctf:     #34d399;
       --cve:     #f87171;
       --other:   #a855f7;
+      --tips:    #f59e0b;
       --radius:  10px;
       --max:     860px;
       --ease:    cubic-bezier(.4,0,.2,1);
@@ -241,6 +260,7 @@
     .filter-tab.active-ctf  { background: rgba(52,211,153,.15); border-color: var(--ctf);  color: var(--ctf);  }
     .filter-tab.active-cve  { background: rgba(248,113,113,.15); border-color: var(--cve);  color: var(--cve);  }
     .filter-tab.active-other{ background: rgba(168,85,247,.15);  border-color: var(--purple); color: var(--purple); }
+    .filter-tab.active-tips { background: rgba(245,158,11,.15);  border-color: var(--tips);   color: var(--tips);   }
 
     /* ── 2. POST LIST + STAGGER ──────────────────── */
     .post-list {
@@ -277,6 +297,7 @@
     .post-tag.ctf   { color: var(--ctf); }
     .post-tag.cve   { color: var(--cve); }
     .post-tag.other { color: var(--other); }
+    .post-tag.tips  { color: var(--tips); }
 
     .post-title {
       font-weight: 500; font-size: .9rem;
@@ -394,6 +415,7 @@
     .post-reader-tag.ctf   { color: var(--ctf); }
     .post-reader-tag.cve   { color: var(--cve); }
     .post-reader-tag.other { color: var(--other); }
+    .post-reader-tag.tips  { color: var(--tips); }
 
     .post-reader-title {
       font-family: 'Syne', sans-serif;
@@ -476,6 +498,40 @@
       gap: 1rem; flex-wrap: wrap;
     }
     .footer-left { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--dim); }
+    /* ── COPY BUTTON ──────────────────────────────── */
+    .md pre { position: relative; }
+    .copy-btn {
+      position: absolute; top: .5rem; right: .5rem;
+      font-family: 'JetBrains Mono', monospace; font-size: .65rem;
+      padding: .2rem .55rem; border-radius: 4px;
+      background: var(--bg3); border: 1px solid var(--border);
+      color: var(--dim); cursor: pointer; transition: all .15s;
+      opacity: 0;
+    }
+    .md pre:hover .copy-btn { opacity: 1; }
+    .copy-btn:hover { color: var(--purple); border-color: var(--purple2); }
+
+    /* ── TABLE OF CONTENTS ────────────────────────── */
+    .toc {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .toc-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem; color: var(--purple);
+      letter-spacing: .1em; text-transform: uppercase;
+      display: block; margin-bottom: .6rem;
+    }
+    .toc ul { list-style: none; display: flex; flex-direction: column; gap: .3rem; }
+    .toc-link {
+      background: none; border: none; cursor: pointer; text-align: left;
+      font-size: .8rem; color: var(--muted); font-family: 'Manrope', sans-serif;
+      padding: 0; transition: color .15s;
+    }
+    .toc-link:hover { color: var(--text); }
+    .toc .toc-sub .toc-link { padding-left: 1rem; font-size: .75rem; color: var(--dim); }
+
     /* ── LIGHTBOX ─────────────────────────────────── */
     .lightbox-overlay {
       position: fixed; inset: 0; z-index: 9999;
@@ -575,16 +631,22 @@ const LANG_COLORS = {
 };
 
 /* ── POST CONFIG ────────────────────────────────
-   tag: 'ctf' | 'cve' | 'other'   difficulty: 1–5
+   tag: 'ctf' | 'cve' | 'tips'   difficulty: 1–5
+   Yeni yazı ekleyince buraya da satır ekle.
    ─────────────────────────────────────────────── */
 const POST_CONFIG = {
-  'Overpass | TryHackMe':                      { tag: 'ctf', difficulty: 2 },
-  'NetGuard | Hackviser':                      { tag: 'ctf', difficulty: 3 },
-  'Session Hijacking via Chrome Debug Mode':   { tag: 'cve', difficulty: 2 },
-  'Tomcat JSP Upload RCE — CVE-2017-12617':    { tag: 'cve', difficulty: 3 },
-  'CVE-2021-42013 — Apache Path Traversal RCE':{ tag: 'cve', difficulty: 3 },
-  'Sudo Root Escape — CVE-2025-32463':         { tag: 'cve', difficulty: 4 },
+  'Overpass | TryHackMe':                      { tag: 'ctf',  difficulty: 2, slug: 'overpass-thm' },
+  'NetGuard | Hackviser':                      { tag: 'ctf',  difficulty: 3, slug: 'netguard-hackviser' },
+  'Session Hijacking via Chrome Debug Mode':   { tag: 'tips', difficulty: 2, slug: 'chrome-cookie-hijack' },
+  'Tomcat JSP Upload RCE — CVE-2017-12617':    { tag: 'cve',  difficulty: 3, slug: 'tomcat-cve-2017-12617' },
+  'CVE-2021-42013 — Apache Path Traversal RCE':{ tag: 'cve',  difficulty: 3, slug: 'apache-cve-2021-42013' },
+  'Sudo Root Escape — CVE-2025-32463':         { tag: 'cve',  difficulty: 4, slug: 'sudo-cve-2025-32463' },
 };
+
+// slug → dosya adı reverse map (router için)
+const SLUG_TO_NAME = Object.fromEntries(
+  Object.entries(POST_CONFIG).map(([name, cfg]) => [cfg.slug, name])
+);
 
 /* ── CACHE ─────────────────────────────────────── */
 function getCache(k, ttl = 3600000) {
@@ -676,7 +738,7 @@ function detectDiff(c='') {
   return 3;
 }
 async function getMeta(name) {
-  const k = `meta_v2_${name}`;
+  const k = `meta_v3_${name}`;
   const c = getCache(k, 86400000);
   if (c) return c;
   const cfg = POST_CONFIG[name];
@@ -706,7 +768,9 @@ const inner = () => document.querySelector('#page .page-inner');
 
 /* ── 2. RENDER POST ROW WITH STAGGER ─────────────── */
 function renderPostRow(p, meta, i) {
-  return `<a class="post-item" href="#post=${encodeURIComponent(p.name)}"
+  const slug = POST_CONFIG[p.name]?.slug;
+  const href = slug ? `#post=${slug}` : `#post=${encodeURIComponent(p.name)}`;
+  return `<a class="post-item" href="${href}"
     data-category="${meta.category}"
     style="animation-delay:${i * 55}ms">
     <span class="post-tag ${meta.category}">${meta.category.toUpperCase()}</span>
@@ -743,7 +807,7 @@ function initFilter() {
       const f = btn.dataset.filter;
       // Update active tab styling
       document.querySelectorAll('.filter-tab').forEach(b => {
-        b.classList.remove('active','active-ctf','active-cve','active-other');
+        b.classList.remove('active','active-ctf','active-cve','active-other','active-tips');
       });
       if (f === 'all') btn.classList.add('active');
       else btn.classList.add(`active-${f}`);
@@ -836,7 +900,7 @@ const routes = {
         <button class="filter-tab active" data-filter="all">All</button>
         <button class="filter-tab" data-filter="ctf">CTF</button>
         <button class="filter-tab" data-filter="cve">CVE</button>
-        <button class="filter-tab" data-filter="other">Other</button>
+        <button class="filter-tab" data-filter="tips">Tips</button>
       </div>
       <div class="post-list" id="all-posts">${loader()}</div>`;
     document.title = 'Blog — ozcanpng';
@@ -911,6 +975,9 @@ const routes = {
 
       document.querySelectorAll('.md pre code').forEach(b => { if (window.hljs) hljs.highlightElement(b); });
       document.title = `${name} — ozcanpng`;
+      const mdEl = document.querySelector('.md');
+      if (mdEl) buildTOC(mdEl);
+      addCopyButtons();
       initLightbox();
     } catch {
       if (_navEpoch === epoch) document.getElementById('post-content').innerHTML = '<div class="empty">Post could not be loaded.</div>';
@@ -931,7 +998,9 @@ function router() {
   else if (hash === 'blog')     navigate(() => { routes.blog(); setNav('blog'); });
   else if (hash === 'about')    navigate(() => { routes.about(); setNav('about'); });
   else if (hash.startsWith('post=')) {
-    navigate(() => { routes.post(decodeURIComponent(hash.replace('post=',''))); setNav('blog'); });
+    const raw = decodeURIComponent(hash.replace('post=',''));
+    const name = SLUG_TO_NAME[raw] || raw;
+    navigate(() => { routes.post(name); setNav('blog'); });
   } else navigate(() => { routes.home(); setNav('home'); });
 }
 
@@ -942,6 +1011,49 @@ document.getElementById('nav-mobile-btn').addEventListener('click', () =>
 document.querySelectorAll('.nav-link').forEach(a =>
   a.addEventListener('click', () => document.getElementById('nav-links').classList.remove('open'))
 );
+
+/* ── TABLE OF CONTENTS ──────────────────────────── */
+function buildTOC(mdEl) {
+  const headings = [...mdEl.querySelectorAll('h2, h3')];
+  if (headings.length < 3) return;
+  const nav = document.createElement('nav');
+  nav.className = 'toc';
+  const label = document.createElement('span');
+  label.className = 'toc-label'; label.textContent = 'Contents';
+  nav.appendChild(label);
+  const ul = document.createElement('ul');
+  headings.forEach(h => {
+    const li = document.createElement('li');
+    li.className = h.tagName === 'H3' ? 'toc-sub' : '';
+    const btn = document.createElement('button');
+    btn.className = 'toc-link';
+    btn.textContent = h.textContent;
+    btn.addEventListener('click', () => {
+      const top = h.getBoundingClientRect().top + window.scrollY - 72;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+    li.appendChild(btn);
+    ul.appendChild(li);
+  });
+  nav.appendChild(ul);
+  mdEl.insertBefore(nav, mdEl.firstChild);
+}
+
+/* ── COPY BUTTONS ───────────────────────────────── */
+function addCopyButtons() {
+  document.querySelectorAll('.md pre').forEach(pre => {
+    if (pre.querySelector('.copy-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn'; btn.textContent = 'copy';
+    btn.addEventListener('click', async () => {
+      const text = pre.querySelector('code')?.innerText || pre.innerText;
+      await navigator.clipboard.writeText(text).catch(() => {});
+      btn.textContent = 'copied!';
+      setTimeout(() => { btn.textContent = 'copy'; }, 2000);
+    });
+    pre.appendChild(btn);
+  });
+}
 
 /* ── LIGHTBOX ───────────────────────────────────── */
 function initLightbox() {

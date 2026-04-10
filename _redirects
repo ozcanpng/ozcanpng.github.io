@@ -1,0 +1,2 @@
+# Redirect github.io to custom domain (Cloudflare Pages only)
+https://ozcanpng.github.io/* https://ozcanpng.dev/:splat 301
