@@ -894,8 +894,8 @@ const routes = {
       if (!res.ok) throw new Error(res.status);
       let md = await res.text();
       md = md.replaceAll(
-        `https://github.com/${GH_USER}/${GH_REPO}/blob/main/posts/`,
-        `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/posts/`
+        `https://github.com/${GH_USER}/${GH_REPO}/blob/main/`,
+        `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/`
       );
       const meta = await getMeta(name);
       const posts = await getPosts().catch(() => []);
