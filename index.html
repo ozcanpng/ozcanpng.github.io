@@ -627,38 +627,36 @@ function startTyping(el) {
 }
 
 /* ── GITHUB API ────────────────────────────────── */
-async function ghGet(url) {
-  const r = await fetch(url, { headers: { Accept: 'application/vnd.github.v3+json' } });
-  if (!r.ok) throw new Error(`GH ${r.status}`);
-  return r.json();
-}
+/* ── STATIC POSTS ────────────────────────────────
+   Yeni yazı eklemek için buraya satır ekle.
+   date: ISO tarih, name: dosya adı (.md olmadan)
+   ─────────────────────────────────────────────── */
+const POSTS = [
+  { name: 'CVE-2021-42013 — Apache Path Traversal RCE', date: new Date('2025-07-23') },
+  { name: 'Session Hijacking via Chrome Debug Mode',     date: new Date('2025-07-22') },
+  { name: 'Sudo Root Escape — CVE-2025-32463',           date: new Date('2025-07-17') },
+  { name: 'Overpass | TryHackMe',                        date: new Date('2025-07-11') },
+  { name: 'Tomcat JSP Upload RCE — CVE-2017-12617',      date: new Date('2025-07-05') },
+  { name: 'NetGuard | Hackviser',                        date: new Date('2025-06-29') },
+];
 
-async function getRepos() {
-  const k = 'gh_repos_v3';
-  const c = getCache(k);
-  if (c) return c;
-  const all = await ghGet(`https://api.github.com/users/${GH_USER}/repos?sort=created&per_page=12`);
-  const d = all.filter(r => !['ozcanpng','ozcanpng.github.io'].includes(r.name)).slice(0,9);
-  setCache(k, d); return d;
-}
+/* ── STATIC REPOS ────────────────────────────────
+   Yeni proje eklemek için buraya satır ekle.
+   ─────────────────────────────────────────────── */
+const REPOS = [
+  { name: 'SecureShift',           description: 'Security training project with Go and SQLite showcasing common web vulnerabilities.', html_url: 'https://github.com/ozcanpng/SecureShift',           language: 'Go',     stargazers_count: 2, created_at: '2025-09-20' },
+  { name: 'Stock-Hunter',          description: 'Track Zara, Pull&Bear, Bershka products — get notified instantly when stock arrives.', html_url: 'https://github.com/ozcanpng/Stock-Hunter',          language: 'Python', stargazers_count: 2, created_at: '2025-07-31' },
+  { name: 'Delta-Fortress',        description: '',                                                                                     html_url: 'https://github.com/ozcanpng/Delta-Fortress',        language: 'PHP',    stargazers_count: 0, created_at: '2025-10-13' },
+  { name: 'pico-ducky',            description: 'Rubber Ducky-like device using Raspberry Pi Pico. Turkish translated source.',        html_url: 'https://github.com/ozcanpng/pico-ducky',            language: 'Python', stargazers_count: 1, created_at: '2024-02-16' },
+  { name: 'BadPico',               description: 'Payloads for Raspberry Pi Pico — everything the USB Rubber Ducky can do.',            html_url: 'https://github.com/ozcanpng/BadPico',               language: null,     stargazers_count: 1, created_at: '2024-02-16' },
+  { name: 'Cargo-Tracking-System', description: 'Cargo tracking web application using Flask and MySQL.',                               html_url: 'https://github.com/ozcanpng/Cargo-Tracking-System', language: 'HTML',   stargazers_count: 0, created_at: '2025-04-29' },
+  { name: 'Everything4CyberSec',   description: 'Curated cybersecurity resources and references.',                                     html_url: 'https://github.com/ozcanpng/Everything4CyberSec',   language: null,     stargazers_count: 0, created_at: '2025-06-12' },
+  { name: 'backd00r',              description: 'Backdoor files for educational purposes.',                                            html_url: 'https://github.com/ozcanpng/backd00r',              language: null,     stargazers_count: 0, created_at: '2024-01-10' },
+  { name: 'ozdouz',                description: '',                                                                                     html_url: 'https://github.com/ozcanpng/ozdouz',                language: null,     stargazers_count: 0, created_at: '2026-03-07' },
+];
 
-async function getPosts() {
-  const k = 'gh_posts_v3';
-  const c = getCache(k, 1800000);
-  if (c) return c;
-  const files = await ghGet(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/posts`);
-  const mds = files.filter(f => f.name.endsWith('.md') && f.name !== 'README.md');
-  const posts = await Promise.all(mds.map(async f => {
-    const name = f.name.replace('.md','');
-    try {
-      const commits = await ghGet(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/commits?path=${f.name}&per_page=100`);
-      const first = commits[commits.length-1];
-      return { name, date: first ? new Date(first.commit.author.date) : new Date() };
-    } catch { return { name, date: new Date() }; }
-  }));
-  const d = posts.sort((a,b) => b.date - a.date);
-  setCache(k, d); return d;
-}
+async function getRepos() { return REPOS; }
+async function getPosts() { return POSTS; }
 
 /* ── METADATA ──────────────────────────────────── */
 function calcReadTime(t) {
