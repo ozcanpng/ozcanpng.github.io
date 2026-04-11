@@ -347,37 +347,42 @@
 
     /* ── ABOUT PAGE ──────────────────────────────── */
     .about-section {
-      padding-top: 3rem;
       min-height: calc(100vh - 56px);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 4rem 0 6rem;
     }
     .about-avatar {
-      width: 80px; height: 80px;
-      border-radius: 50%; border: 2px solid var(--purple2);
-      margin-bottom: 1.5rem;
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      border: 2px solid var(--purple2);
+      box-shadow: 0 0 0 5px rgba(168,85,247,.07), 0 0 28px rgba(168,85,247,.14);
+      margin-bottom: 1.75rem;
     }
     .about-name {
       font-family: 'Syne', sans-serif;
-      font-size: 1.7rem; font-weight: 800;
-      letter-spacing: -.02em; margin-bottom: .5rem;
+      font-size: 2rem; font-weight: 800;
+      letter-spacing: -.03em; margin-bottom: .45rem;
     }
     .about-role {
       font-family: 'JetBrains Mono', monospace;
-      font-size: .78rem; color: var(--purple);
-      letter-spacing: .1em; text-transform: uppercase; margin-bottom: 1.5rem;
+      font-size: .76rem; color: var(--purple);
+      letter-spacing: .12em; text-transform: uppercase; margin-bottom: 2rem;
     }
     .about-body {
-      font-size: .96rem; color: var(--muted);
-      line-height: 1.8; max-width: 580px;
-      display: flex; flex-direction: column; gap: 1rem;
+      font-size: .97rem; color: var(--muted);
+      line-height: 1.85; max-width: 560px;
+      display: flex; flex-direction: column; gap: 1.1rem;
     }
     .about-body em { color: var(--text); font-style: normal; font-weight: 500; }
-    .badge-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; }
+    .badge-row { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: 1.25rem; }
     .badge {
       font-family: 'JetBrains Mono', monospace;
-      font-size: .7rem; padding: .3rem .65rem;
+      font-size: .68rem; padding: .28rem .65rem;
       background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 6px; color: var(--muted);
+      border-radius: 5px; color: var(--muted);
+      transition: border-color .15s, color .15s;
     }
+    .badge:hover { border-color: var(--purple); color: var(--purple); }
 
     /* ── POST READER ─────────────────────────────── */
     .post-reader { padding-top: 2.5rem; }
