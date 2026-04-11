@@ -350,7 +350,9 @@
 
     /* ── ABOUT PAGE ──────────────────────────────── */
     .about-section {
-      padding: 3.5rem 0 5rem;
+      min-height: calc(100vh - 56px - 8.5rem);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 2.5rem 0;
       border-top: 1px solid var(--border);
     }
     .about-avatar {
