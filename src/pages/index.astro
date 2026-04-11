@@ -60,7 +60,7 @@ const recentPosts = allPosts
   </div>
   <div class="post-list">
     {recentPosts.map((post, i) => (
-      <a class="post-item" href={`/blog/${post.data.slug}`}
+      <a class="post-item" href={`/blog/${post.slug}`}
         data-category={post.data.tag}
         style={`animation-delay:${i * 55}ms`}>
         <span class={`post-tag ${post.data.tag}`}>{post.data.tag.toUpperCase()}</span>

@@ -3,7 +3,6 @@ title: "NetGuard | Hackviser"
 date: 2025-06-29
 tag: ctf
 difficulty: 3
-slug: netguard-hackviser
 description: "Hackviser NetGuard challenge — network enumeration and privilege escalation write-up."
 ---
 

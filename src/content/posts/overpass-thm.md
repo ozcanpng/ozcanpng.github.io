@@ -3,7 +3,6 @@ title: "Overpass | TryHackMe"
 date: 2025-07-11
 tag: ctf
 difficulty: 2
-slug: overpass-thm
 description: "TryHackMe Overpass machine — web login bypass, RSA key cracking, and crontab privilege escalation."
 ---
 

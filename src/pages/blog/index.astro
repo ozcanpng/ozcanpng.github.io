@@ -35,7 +35,7 @@ const posts = allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date
   </div>
   <div class="post-list" id="all-posts">
     {posts.map((post, i) => (
-      <a class="post-item" href={`/blog/${post.data.slug}`}
+      <a class="post-item" href={`/blog/${post.slug}`}
         data-category={post.data.tag}
         style={`animation-delay:${i * 55}ms`}>
         <span class={`post-tag ${post.data.tag}`}>{post.data.tag.toUpperCase()}</span>

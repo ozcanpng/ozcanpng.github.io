@@ -7,7 +7,6 @@ const posts = defineCollection({
     date: z.date(),
     tag: z.enum(['ctf', 'cve', 'tips']),
     difficulty: z.number().min(1).max(5),
-    slug: z.string(),
     description: z.string(),
   }),
 });

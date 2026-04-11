@@ -5,7 +5,7 @@ import { getCollection } from 'astro:content';
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
   return posts.map(post => ({
-    params: { slug: post.data.slug },
+    params: { slug: post.slug },
     props: { post },
   }));
 }
@@ -27,13 +27,14 @@ function fmtDate(d: Date | string): string {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
-const { title, date, tag, difficulty, description, slug } = post.data;
+const { title, date, tag, difficulty, description } = post.data;
+const postSlug = post.slug;
 const readTime = calcReadTime(post.body ?? '');
 ---
 <Layout
   title={title}
   description={description}
-  canonical={`https://ozcanpng.dev/blog/${slug}`}
+  canonical={`https://ozcanpng.dev/blog/${postSlug}`}
 >
   <div class="post-reader">
     <a class="post-reader-back" href="/blog">← Back to Blog</a>

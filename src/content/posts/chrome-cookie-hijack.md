@@ -3,7 +3,6 @@ title: "Session Hijacking via Chrome Debug Mode"
 date: 2025-07-22
 tag: tips
 difficulty: 2
-slug: chrome-cookie-hijack
 description: "How to extract session cookies from Chrome's remote debugging port to hijack authenticated sessions."
 ---
 
