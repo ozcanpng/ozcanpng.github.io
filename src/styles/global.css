@@ -51,7 +51,7 @@
       display: flex; align-items: center; justify-content: space-between;
     }
     .nav-logo {
-      font-family: 'Nunito Sans', sans-serif;
+      font-family: 'Syne', sans-serif;
       font-weight: 700; font-size: 1rem;
       color: var(--text); text-decoration: none;
       letter-spacing: -.01em;
@@ -126,7 +126,7 @@
       margin-bottom: 1.25rem;
     }
     .hero-name {
-      font-family: 'Nunito Sans', sans-serif;
+      font-family: 'Syne', sans-serif;
       font-size: clamp(2.6rem, 7vw, 3.8rem);
       font-weight: 800; line-height: 1.05;
       letter-spacing: -.03em; color: var(--text);
@@ -186,7 +186,7 @@
       margin: 3rem 0 1.25rem;
     }
     .section-title {
-      font-family: 'Nunito Sans', sans-serif;
+      font-family: 'Syne', sans-serif;
       font-size: .95rem; font-weight: 700;
       letter-spacing: .04em; text-transform: uppercase;
       color: var(--muted);
@@ -252,6 +252,7 @@
       letter-spacing: .08em; text-transform: uppercase;
       padding: .2rem .5rem; border-radius: 4px;
       border: 1px solid currentColor; white-space: nowrap;
+      min-width: 3.6rem; text-align: center;
     }
     .post-tag.ctf   { color: var(--ctf); }
     .post-tag.cve   { color: var(--cve); }
@@ -328,7 +329,7 @@
       margin-bottom: 1.5rem;
     }
     .about-name {
-      font-family: 'Nunito Sans', sans-serif;
+      font-family: 'Syne', sans-serif;
       font-size: 1.7rem; font-weight: 800;
       letter-spacing: -.02em; margin-bottom: .5rem;
     }
@@ -377,7 +378,7 @@
     .post-reader-tag.tips  { color: var(--tips); }
 
     .post-reader-title {
-      font-family: 'Nunito Sans', sans-serif;
+      font-family: 'Syne', sans-serif;
       font-size: clamp(1.6rem, 4vw, 2.2rem);
       font-weight: 800; line-height: 1.15;
       letter-spacing: -.02em; margin-bottom: .75rem;
@@ -398,7 +399,7 @@
     }
     .md > * + * { margin-top: 1.2em; }
     .md h1, .md h2, .md h3, .md h4 {
-      font-family: 'Nunito Sans', sans-serif;
+      font-family: 'Syne', sans-serif;
       font-weight: 700; letter-spacing: -.02em; line-height: 1.25; color: var(--text);
     }
     .md h1 { font-size: 1.7rem; margin-top: 2rem; }
