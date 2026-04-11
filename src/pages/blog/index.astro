@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+function calcReadTime(text: string): string {
+  const codeLines = (text.match(/```[\s\S]*?```/g) ?? []).reduce((s, b) => s + b.split('\n').length - 2, 0);
+  const words = text.replace(/```[\s\S]*?```/g, '').replace(/[#*_[\]()!`]/g, '').split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 180 + codeLines / 30)) + ' min';
+}
+
+function stars(n: number): string {
+  return Array.from({ length: 5 }, (_, i) => `<span class="${i < n ? 'on' : ''}">${i < n ? '★' : '☆'}</span>`).join('');
+}
+
+function fmtDate(d: Date | string): string {
+  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const allPosts = await getCollection('posts');
+const posts = allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+<Layout
+  title="Blog"
+  description="All write-ups — CTF solutions, CVE analysis, security tips."
+  canonical="https://ozcanpng.dev/blog"
+>
+  <div class="section-head" style="margin-top:2.5rem">
+    <span class="section-title">All Write-ups</span>
+  </div>
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-filter="all">All</button>
+    <button class="filter-tab" data-filter="ctf">CTF</button>
+    <button class="filter-tab" data-filter="cve">CVE</button>
+    <button class="filter-tab" data-filter="tips">Tips</button>
+  </div>
+  <div class="post-list" id="all-posts">
+    {posts.map((post, i) => (
+      <a class="post-item" href={`/blog/${post.data.slug}`}
+        data-category={post.data.tag}
+        style={`animation-delay:${i * 55}ms`}>
+        <span class={`post-tag ${post.data.tag}`}>{post.data.tag.toUpperCase()}</span>
+        <span class="post-title">{post.data.title}</span>
+        <span class="post-meta">
+          <span class="stars" set:html={stars(post.data.difficulty)} />
+          <span>{fmtDate(post.data.date)}</span>
+          <span>{calcReadTime(post.body ?? '')}</span>
+        </span>
+      </a>
+    ))}
+  </div>
+</Layout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.filter-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter ?? 'all';
+      document.querySelectorAll('.filter-tab').forEach(b => {
+        b.classList.remove('active', 'active-ctf', 'active-cve', 'active-other', 'active-tips');
+      });
+      if (f === 'all') btn.classList.add('active');
+      else btn.classList.add(`active-${f}`);
+
+      let visible = 0;
+      document.querySelectorAll<HTMLElement>('.post-item').forEach(item => {
+        const match = f === 'all' || item.dataset.category === f;
+        item.style.display = match ? 'grid' : 'none';
+        if (match) {
+          item.style.animationDelay = `${visible * 45}ms`;
+          item.style.animation = 'none';
+          item.offsetHeight;
+          item.style.animation = '';
+          visible++;
+        }
+      });
+    });
+  });
+</script>
