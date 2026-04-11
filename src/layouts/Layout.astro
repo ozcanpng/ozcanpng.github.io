@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
   title?: string;
@@ -32,6 +33,7 @@ const currentPath = Astro.url.pathname;
   <link rel="icon" type="image/png" href="https://github.com/ozcanpng.png" />
   <link rel="apple-touch-icon" href="https://github.com/ozcanpng.png" />
   <link rel="alternate" type="application/rss+xml" title="ozcanpng RSS" href="/feed.xml" />
+  <ViewTransitions />
   <meta name="theme-color" content="#a855f7" />
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",

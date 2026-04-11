@@ -127,8 +127,13 @@ const readTime = calcReadTime(post.body ?? '');
     });
   }
 
-  buildTOC();
-  addCopyButtons();
-  initLightbox();
-  window.scrollTo({ top: 0, behavior: 'instant' });
+  function init() {
+    buildTOC();
+    addCopyButtons();
+    initLightbox();
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  // Run on first load and on every View Transitions navigation
+  document.addEventListener('astro:page-load', init);
 </script>
