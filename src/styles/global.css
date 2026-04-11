@@ -341,15 +341,19 @@
     }
 
     /* ── ANCHOR SCROLL OFFSET (sticky nav = 56px) ── */
-    #home, #projects, #about {
+    #home, #projects {
       scroll-margin-top: 72px;
+    }
+    #about {
+      scroll-margin-top: 56px;
     }
 
     /* ── ABOUT PAGE ──────────────────────────────── */
     .about-section {
       min-height: calc(100vh - 56px);
       display: flex; flex-direction: column; justify-content: center;
-      padding: 4rem 0 6rem;
+      padding: 4rem 0 4rem;
+      border-top: 1px solid var(--border);
     }
     .about-avatar {
       width: 88px; height: 88px;
