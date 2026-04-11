@@ -72,7 +72,12 @@
     }
     .nav-logo span { color: var(--purple); }
 
-    .nav-links { display: flex; gap: .25rem; }
+    .nav-links { display: flex; align-items: center; gap: .2rem; }
+    .nav-sep {
+      width: 1px; height: 12px;
+      background: var(--dim);
+      flex-shrink: 0; opacity: .7;
+    }
     .nav-link {
       position: relative;
       font-size: .82rem; font-weight: 500;
@@ -547,6 +552,7 @@
         background: var(--bg); border-bottom: 1px solid var(--border);
         padding: .75rem 1rem;
       }
+      .nav-links.open .nav-sep { display: none; }
       .hero { padding: 3rem 0 2.5rem; }
       .post-item { grid-template-columns: auto 1fr; }
       .post-meta  { display: none; }

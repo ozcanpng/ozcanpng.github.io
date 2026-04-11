@@ -57,7 +57,11 @@ const currentPath = Astro.url.pathname;
       <a href="/" class="nav-logo">ozcan<span>png</span></a>
       <div class="nav-links" id="nav-links">
         <a href="/" class:list={['nav-link', { active: currentPath === '/' }]}>Home</a>
+        <span class="nav-sep"></span>
         <a href="/blog" class:list={['nav-link', { active: currentPath.startsWith('/blog') }]}>Blog</a>
+        <span class="nav-sep"></span>
+        <a href="/#projects" class="nav-link">Projects</a>
+        <span class="nav-sep"></span>
         <a href="/#about" class="nav-link">About</a>
       </div>
       <button class="nav-mobile-btn" id="nav-mobile-btn" aria-label="Menu">
@@ -119,30 +123,39 @@ const currentPath = Astro.url.pathname;
       window.location.replace('/blog/' + slug);
     }
 
-    // About section active nav sync
-    function syncAboutNav() {
-      const about = document.getElementById('about');
-      if (!about) return;
-      const homeLink = document.querySelector<HTMLAnchorElement>('a[href="/"].nav-link');
-      const aboutLink = document.querySelector<HTMLAnchorElement>('a[href="/#about"].nav-link');
-      if (!homeLink || !aboutLink) return;
+    // Section-aware active nav sync (home / projects / about)
+    function syncSectionNav() {
+      if (window.location.pathname !== '/') return;
 
-      const io = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          homeLink.classList.remove('active');
-          aboutLink.classList.add('active');
-        } else {
-          aboutLink.classList.remove('active');
-          if (window.location.pathname === '/') homeLink.classList.add('active');
+      const defs = [
+        { id: 'home',     sel: 'a[href="/"].nav-link' },
+        { id: 'projects', sel: 'a[href="/#projects"].nav-link' },
+        { id: 'about',    sel: 'a[href="/#about"].nav-link' },
+      ];
+
+      const items = defs.map(d => ({
+        el:   document.getElementById(d.id),
+        link: document.querySelector<HTMLAnchorElement>(d.sel),
+      })).filter(d => d.el && d.link);
+
+      if (!items.length) return;
+
+      const io = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const hit = items.find(d => d.el === entry.target);
+          if (!hit) continue;
+          items.forEach(d => d.link!.classList.remove('active'));
+          hit.link!.classList.add('active');
         }
-      }, { rootMargin: '-56px 0px 0px 0px', threshold: 0.1 });
+      }, { rootMargin: '-56px 0px -45% 0px', threshold: 0 });
 
-      io.observe(about);
+      items.forEach(d => io.observe(d.el!));
     }
 
     // Run on first load + re-run after every ViewTransitions navigation
-    syncAboutNav();
-    document.addEventListener('astro:page-load', syncAboutNav);
+    syncSectionNav();
+    document.addEventListener('astro:page-load', syncSectionNav);
   </script>
 </body>
 </html>
