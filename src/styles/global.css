@@ -22,7 +22,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Manrope', sans-serif;
+      font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -393,7 +393,7 @@
 
     /* ── MARKDOWN ────────────────────────────────── */
     .md {
-      font-family: 'Manrope', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: .97rem; line-height: 1.8; color: var(--text);
     }
     .md > * + * { margin-top: 1.2em; }
@@ -484,7 +484,7 @@
     .toc ul { list-style: none; display: flex; flex-direction: column; gap: .3rem; }
     .toc-link {
       background: none; border: none; cursor: pointer; text-align: left;
-      font-size: .8rem; color: var(--muted); font-family: 'Manrope', sans-serif;
+      font-size: .8rem; color: var(--muted); font-family: 'Inter', sans-serif;
       padding: 0; transition: color .15s;
     }
     .toc-link:hover { color: var(--text); }
