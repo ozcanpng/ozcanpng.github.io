@@ -414,11 +414,11 @@
     .md > * + * { margin-top: 1.2em; }
     .md h1, .md h2, .md h3, .md h4 {
       font-family: 'Syne', sans-serif;
-      font-weight: 700; letter-spacing: -.02em; line-height: 1.25; color: var(--text);
+      font-weight: 800; letter-spacing: -.025em; line-height: 1.2; color: var(--text);
     }
-    .md h1 { font-size: 1.7rem; margin-top: 2rem; }
-    .md h2 { font-size: 1.3rem; margin-top: 1.8rem; color: #c084fc; }
-    .md h3 { font-size: 1.1rem; margin-top: 1.4rem; }
+    .md h1 { font-size: 1.9rem; margin-top: 2rem; }
+    .md h2 { font-size: 1.5rem; margin-top: 1.8rem; color: #c084fc; }
+    .md h3 { font-size: 1.2rem; margin-top: 1.4rem; }
     .md a { color: var(--purple); text-underline-offset: 3px; }
     .md a:hover { opacity: .8; }
     .md code {
