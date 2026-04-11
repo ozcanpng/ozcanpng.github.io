@@ -1,0 +1,140 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const LANG_COLORS: Record<string, string> = {
+  JavaScript: '#f1e05a', TypeScript: '#3178c6', Python: '#3572a5',
+  Go: '#00add8', Rust: '#dea584', C: '#555555', 'C++': '#f34b7d',
+  'C#': '#178600', Shell: '#89e051', HTML: '#e34c26', CSS: '#563d7c',
+  Java: '#b07219', PHP: '#4f5d95', Ruby: '#701516', Kotlin: '#a97bff',
+  Swift: '#f05138', Dart: '#00b4ab', PowerShell: '#012456',
+};
+
+const REPOS = [
+  { name: 'SecureShift',           description: 'Security training project with Go and SQLite showcasing common web vulnerabilities.',     html_url: 'https://github.com/ozcanpng/SecureShift',           language: 'Go',     stargazers_count: 2 },
+  { name: 'Stock-Hunter',          description: 'Track Zara, Pull&Bear, Bershka products — get notified instantly when stock arrives.',    html_url: 'https://github.com/ozcanpng/Stock-Hunter',          language: 'Python', stargazers_count: 2 },
+  { name: 'Cargo-Tracking-System', description: 'Cargo tracking web application using Flask and MySQL.',                                   html_url: 'https://github.com/ozcanpng/Cargo-Tracking-System', language: 'HTML',   stargazers_count: 0 },
+  { name: 'pico-ducky',            description: 'Rubber Ducky-like device using Raspberry Pi Pico. Turkish translated source.',            html_url: 'https://github.com/ozcanpng/pico-ducky',            language: 'Python', stargazers_count: 1 },
+  { name: 'BadPico',               description: 'Payloads for Raspberry Pi Pico — everything the USB Rubber Ducky can do.',               html_url: 'https://github.com/ozcanpng/BadPico',               language: null,     stargazers_count: 1 },
+];
+
+function calcReadTime(text: string): string {
+  const codeLines = (text.match(/```[\s\S]*?```/g) ?? []).reduce((s, b) => s + b.split('\n').length - 2, 0);
+  const words = text.replace(/```[\s\S]*?```/g, '').replace(/[#*_[\]()!`]/g, '').split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 180 + codeLines / 30)) + ' min';
+}
+
+function stars(n: number): string {
+  return Array.from({ length: 5 }, (_, i) => `<span class="${i < n ? 'on' : ''}">${i < n ? '★' : '☆'}</span>`).join('');
+}
+
+function fmtDate(d: Date | string): string {
+  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const allPosts = await getCollection('posts');
+const recentPosts = allPosts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 4);
+---
+<Layout>
+  <section class="hero" id="home">
+    <div class="hero-eyebrow">// offensive security</div>
+    <h1 class="hero-name">Özcan<br /><span>Ersan</span></h1>
+    <div class="typing-wrap">
+      <span class="prompt">
+        <span class="prompt-user">ozcanpng</span><span class="prompt-at">@</span><span class="prompt-host">pngwashere</span><span class="prompt-path"> ~</span><span class="prompt-sym"> $</span>
+      </span>
+      <span class="typing-text" id="typing-text"></span><span class="cursor"></span>
+    </div>
+    <p class="hero-bio">4th-year Computer Engineering student. Penetration tester, CTF player, and vulnerability researcher. Writing about what I find.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/blog">Read the Blog</a>
+      <a class="btn btn-ghost" href="https://github.com/ozcanpng" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <span class="section-title">Recent Write-ups</span>
+    <a class="section-more" href="/blog">View all →</a>
+  </div>
+  <div class="post-list">
+    {recentPosts.map((post, i) => (
+      <a class="post-item" href={`/blog/${post.data.slug}`}
+        data-category={post.data.tag}
+        style={`animation-delay:${i * 55}ms`}>
+        <span class={`post-tag ${post.data.tag}`}>{post.data.tag.toUpperCase()}</span>
+        <span class="post-title">{post.data.title}</span>
+        <span class="post-meta">
+          <span class="stars" set:html={stars(post.data.difficulty)} />
+          <span>{fmtDate(post.data.date)}</span>
+          <span>{calcReadTime(post.body ?? '')}</span>
+        </span>
+      </a>
+    ))}
+  </div>
+
+  <div class="section-head">
+    <span class="section-title">Projects</span>
+    <a class="section-more" href="https://github.com/ozcanpng" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+  <div class="project-grid">
+    {REPOS.map(r => {
+      const color = r.language ? LANG_COLORS[r.language] : null;
+      return (
+        <a class="project-card" href={r.html_url} target="_blank" rel="noopener">
+          <div class="project-name">{r.name}</div>
+          <div class="project-desc">{r.description}</div>
+          <div class="project-meta">
+            {r.language && (
+              <span class="lang-label">
+                {color && <span class="lang-dot" style={`background:${color}`} />}
+                {r.language}
+              </span>
+            )}
+            {r.stargazers_count > 0 && <span>★ {r.stargazers_count}</span>}
+          </div>
+        </a>
+      );
+    })}
+    <a class="project-card project-card-more" href="https://github.com/ozcanpng" target="_blank" rel="noopener">
+      View all on GitHub →
+    </a>
+  </div>
+
+  <section class="about-section" id="about">
+    <img class="about-avatar" src="https://github.com/ozcanpng.png" alt="ozcanpng" />
+    <h1 class="about-name">Özcan Ersan</h1>
+    <p class="about-role">Offensive Security · ozcanpng</p>
+    <div class="about-body">
+      <p>Hello! I'm a <em>4th-year Computer Engineering student</em> actively training under the <em>Siber Vatan</em> program, working towards specializing in cybersecurity.</p>
+      <p>My main focus areas are <em>Web Application Security</em> and <em>penetration testing</em>. I have a strong interest in <em>malware development</em> and regularly solve <em>CTF challenges</em> to sharpen my skills.</p>
+      <p>In my own lab environment, I conduct technical experiments, explore real-world vulnerabilities, and share findings through <em>detailed write-ups</em>.</p>
+      <div class="badge-row">
+        <span class="badge">Web App Security</span>
+        <span class="badge">Penetration Testing</span>
+        <span class="badge">CTF</span>
+        <span class="badge">Malware Dev</span>
+        <span class="badge">CVE Research</span>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const cmds = ['go run backdoor.go', 'jadx-gui ./target.apk', 'frida -U -f com.target.app', 'adb shell id', 'burpsuite --project web.json'];
+  let wi = 0, ci = 0, del = false;
+  const textEl = document.getElementById('typing-text');
+  if (textEl) {
+    function tick() {
+      const w = cmds[wi];
+      if (del) { textEl.textContent = w.slice(0, --ci); }
+      else     { textEl.textContent = w.slice(0, ++ci); }
+      let ms = del ? 45 : 100;
+      if (!del && ci === w.length) { ms = 2000; del = true; }
+      else if (del && ci === 0)    { del = false; wi = (wi + 1) % cmds.length; ms = 500; }
+      setTimeout(tick, ms);
+    }
+    setTimeout(tick, 700);
+  }
+</script>
