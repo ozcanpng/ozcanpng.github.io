@@ -1,5 +1,5 @@
 ---
-title: "NetGuard | Hackviser"
+title: "Hackviser NetGuard — Walkthrough"
 date: 2025-06-29
 tag: ctf
 difficulty: 3

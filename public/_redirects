@@ -1,2 +1,10 @@
-# Redirect github.io to custom domain (Cloudflare Pages only)
-https://ozcanpng.github.io/* https://ozcanpng.dev/:splat 301
+# Old URL slugs → new SEO-friendly slugs (Cloudflare Pages)
+/blog/apache-cve-2021-42013/*   /blog/apache-path-traversal-rce/  301
+/blog/sudo-cve-2025-32463/*     /blog/sudo-privilege-escalation/  301
+/blog/overpass-thm/*            /blog/tryhackme-overpass/          301
+/blog/tomcat-cve-2017-12617/*   /blog/tomcat-jsp-upload-rce/       301
+/blog/netguard-hackviser/*      /blog/hackviser-netguard/          301
+
+# Legacy dev URLs
+/post.html                      /blog/                             302
+/blog.html                      /blog/                             301

@@ -1,0 +1,167 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogType?: 'website' | 'article';
+  ogImage?: string;
+  bodyClass?: string;
+  jsonLd?: object;
+  navActive?: 'home' | 'blog' | '';
+}
+
+const {
+  title,
+  description,
+  canonical = new URL(Astro.url.pathname, Astro.site).toString(),
+  ogType = 'website',
+  ogImage = 'https://github.com/ozcanpng.png',
+  bodyClass = '',
+  jsonLd,
+  navActive = '',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="author" content="Özcan Ersan" />
+<link rel="canonical" href={canonical} />
+
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:site_name" content="ozcanpng.dev" />
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<link rel="icon" type="image/png" href="https://github.com/ozcanpng.png" />
+<link rel="apple-touch-icon" href="https://github.com/ozcanpng.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@400;500;600;700&family=Syne:wght@700;800&family=Unbounded:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+<slot name="head" />
+</head>
+<body class={bodyClass}>
+
+<div class="scroll-progress" id="progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">ozcanpng<span>.dev</span></a>
+    <div class="nav-links">
+      <a class={`nav-link ${navActive==='home' ? 'active':''}`} href="/#home">~/home</a>
+      <a class="nav-link" href="/#focus">~/focus</a>
+      <a class="nav-link" href="/#honors">~/honors</a>
+      <a class={`nav-link ${navActive==='blog' ? 'active':''}`} href="/blog/">~/blog</a>
+      <a class="nav-link" href="/#projects">~/projects</a>
+      <a class="nav-link" href="/#about">~/about</a>
+    </div>
+  </div>
+</nav>
+
+<slot />
+
+<footer>
+  <div>© {new Date().getFullYear()} Özcan Ersan · ozcanpng</div>
+  <div>
+    <a href="https://github.com/ozcanpng" target="_blank" rel="noopener">github</a> &nbsp;·&nbsp;
+    <a href="https://linkedin.com/in/özcanersan" target="_blank" rel="noopener">linkedin</a> &nbsp;·&nbsp;
+    <a href="/sitemap-index.xml">sitemap</a>
+  </div>
+</footer>
+
+<script is:inline>
+/* Polish: smooth scroll, scroll-spy, reveals, cursor spotlight, hero parallax, progress bar */
+(function(){
+  'use strict';
+
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const hash = a.getAttribute('href');
+    if (!hash || hash.length < 2) return;
+    let t; try { t = document.querySelector(hash); } catch(_) { return; }
+    if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.replaceState(null, '', hash);
+  });
+
+  // Scroll-spy
+  (function(){
+    const secs = document.querySelectorAll('main section[id]');
+    if (!secs.length) return;
+    const links = document.querySelectorAll('.nav-link');
+    const byId = new Map();
+    links.forEach(l => { const h = l.getAttribute('href'); if (h && h.charAt(0) === '#') byId.set(h.slice(1), l); });
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting){
+          links.forEach(l => l.classList.remove('active'));
+          const l = byId.get(en.target.id); if (l) l.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    secs.forEach(s => io.observe(s));
+  })();
+
+  // Reveal on scroll
+  (function(){
+    document.querySelectorAll('main section:not(.hero)').forEach(s => s.classList.add('reveal'));
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }});
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  })();
+
+  // Cursor spotlight
+  document.querySelectorAll('.focus-grid, .proj-grid, .honors, .rows').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--sx', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--sy', (e.clientY - r.top)  + 'px');
+    });
+  });
+
+  // Hero parallax
+  (function(){
+    const h = document.querySelector('.hero'); if (!h) return;
+    h.addEventListener('mousemove', e => {
+      const r = h.getBoundingClientRect();
+      h.style.setProperty('--mx', (e.clientX - r.left) / r.width);
+      h.style.setProperty('--my', (e.clientY - r.top)  / r.height);
+    });
+    h.addEventListener('mouseleave', () => { h.style.setProperty('--mx', .5); h.style.setProperty('--my', .5); });
+  })();
+
+  // Scroll progress
+  (function(){
+    const bar = document.getElementById('progress'); if (!bar) return;
+    function tick(){
+      const d = document.documentElement;
+      const pct = d.scrollHeight > d.clientHeight
+        ? (d.scrollTop / (d.scrollHeight - d.clientHeight)) * 100 : 0;
+      bar.style.width = pct + '%';
+    }
+    window.addEventListener('scroll', tick, { passive: true });
+    tick();
+  })();
+})();
+</script>
+
+</body>
+</html>

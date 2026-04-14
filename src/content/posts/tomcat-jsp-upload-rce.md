@@ -1,5 +1,5 @@
 ---
-title: "Tomcat JSP Upload RCE — CVE-2017-12617"
+title: "CVE-2017-12617: Tomcat JSP Upload RCE"
 date: 2025-07-05
 tag: cve
 difficulty: 3

@@ -1,115 +1,207 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-
-const LANG_COLORS: Record<string, string> = {
-  JavaScript: '#f1e05a', TypeScript: '#3178c6', Python: '#3572a5',
-  Go: '#00add8', Rust: '#dea584', C: '#555555', 'C++': '#f34b7d',
-  'C#': '#178600', Shell: '#89e051', HTML: '#e34c26', CSS: '#563d7c',
-  Java: '#b07219', PHP: '#4f5d95', Ruby: '#701516', Kotlin: '#a97bff',
-  Swift: '#f05138', Dart: '#00b4ab', PowerShell: '#012456',
-};
-
-const REPOS = [
-  { name: 'SecureShift',           description: 'Security training project with Go and SQLite showcasing common web vulnerabilities.',     html_url: 'https://github.com/ozcanpng/SecureShift',           language: 'Go',     stargazers_count: 2 },
-  { name: 'Stock-Hunter',          description: 'Track Zara, Pull&Bear, Bershka products — get notified instantly when stock arrives.',    html_url: 'https://github.com/ozcanpng/Stock-Hunter',          language: 'Python', stargazers_count: 2 },
-  { name: 'Cargo-Tracking-System', description: 'Cargo tracking web application using Flask and MySQL.',                                   html_url: 'https://github.com/ozcanpng/Cargo-Tracking-System', language: 'HTML',   stargazers_count: 0 },
-  { name: 'pico-ducky',            description: 'Rubber Ducky-like device using Raspberry Pi Pico. Turkish translated source.',            html_url: 'https://github.com/ozcanpng/pico-ducky',            language: 'Python', stargazers_count: 1 },
-  { name: 'BadPico',               description: 'Payloads for Raspberry Pi Pico — everything the USB Rubber Ducky can do.',               html_url: 'https://github.com/ozcanpng/BadPico',               language: null,     stargazers_count: 1 },
-];
-
-function calcReadTime(text: string): string {
-  const codeLines = (text.match(/```[\s\S]*?```/g) ?? []).reduce((s, b) => s + b.split('\n').length - 2, 0);
-  const words = text.replace(/```[\s\S]*?```/g, '').replace(/[#*_[\]()!`]/g, '').split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.round(words / 180 + codeLines / 30)) + ' min';
-}
-
-function stars(n: number): string {
-  return Array.from({ length: 5 }, (_, i) => `<span class="${i < n ? 'on' : ''}">${i < n ? '★' : '☆'}</span>`).join('');
-}
-
-function fmtDate(d: Date | string): string {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
 
 const allPosts = await getCollection('posts');
 const recentPosts = allPosts
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 4);
+
+function readTime(body: string): string {
+  const code = (body.match(/```[\s\S]*?```/g) || []).reduce((s, b) => s + b.split('\n').length - 2, 0);
+  const words = body.replace(/```[\s\S]*?```/g, '').replace(/[#*_[\]()!`>]/g, '').split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 180 + code / 30)) + ' min';
+}
+function stars(n: number) {
+  return Array.from({ length: 5 }, (_, i) => i < n ? '<span class="on">★</span>' : '<span>☆</span>').join('');
+}
+function fmt(d: Date) {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Özcan Ersan',
+  alternateName: 'ozcanpng',
+  url: 'https://ozcanpng.dev/',
+  image: 'https://github.com/ozcanpng.png',
+  jobTitle: 'Offensive Security Researcher',
+  sameAs: ['https://github.com/ozcanpng', 'https://linkedin.com/in/özcanersan'],
+};
 ---
-<Layout>
+<BaseLayout
+  title="ozcanpng — security researcher"
+  description="Özcan Ersan (ozcanpng) — offensive security researcher. CVE analyses, CTF walkthroughs, red team notes."
+  navActive="home"
+  jsonLd={personJsonLd}
+>
+
+<main>
+
   <section class="hero" id="home">
-    <div class="hero-eyebrow">// offensive security</div>
-    <h1 class="hero-name">Özcan<br /><span>Ersan</span></h1>
+    <div class="hero-eyebrow">// offensive security researcher</div>
+    <h1 class="hero-name">ozcanpng<br/><span>was here</span></h1>
     <div class="typing-wrap">
-      <span class="prompt">
-        <span class="prompt-user">ozcanpng</span><span class="prompt-at">@</span><span class="prompt-host">pngwashere</span><span class="prompt-path"> ~</span><span class="prompt-sym"> $</span>
-      </span>
-      <span class="typing-text" id="typing-text"></span><span class="cursor"></span>
+      <span class="p-user">ozcanpng</span><span class="p-at">@</span><span class="p-host">pngwashere</span><span class="p-sep">:</span><span class="p-path">~</span><span class="p-sym">$</span>
+      <span class="typed" id="typing-text"></span><span class="cursor"></span>
     </div>
-    <p class="hero-bio">4th-year Computer Engineering student. Penetration tester, CTF player, and vulnerability researcher. Writing about what I find.</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="/blog">Read the Blog</a>
-      <a class="btn btn-ghost" href="https://github.com/ozcanpng" target="_blank" rel="noopener">GitHub ↗</a>
+    <p class="hero-bio">
+      4th-year Computer Engineering student. Penetration tester, CTF player
+      and vulnerability researcher. Writing about what I find.
+    </p>
+    <div class="socials">
+      <a class="social" href="https://github.com/ozcanpng" target="_blank" rel="noopener">github</a>
+      <a class="social" href="https://linkedin.com/in/özcanersan" target="_blank" rel="noopener">linkedin</a>
     </div>
   </section>
 
-  <div class="section-head">
-    <span class="section-title">Recent Write-ups</span>
-    <a class="section-more" href="/blog">View all →</a>
-  </div>
-  <div class="post-list">
-    {recentPosts.map((post, i) => (
-      <a class="post-item" href={`/blog/${post.slug}`}
-        data-category={post.data.tag}
-        style={`animation-delay:${i * 55}ms`}>
-        <span class={`post-tag ${post.data.tag}`}>{post.data.tag.toUpperCase()}</span>
-        <span class="post-title">{post.data.title}</span>
-        <span class="post-meta">
-          <span class="stars" set:html={stars(post.data.difficulty)} />
-          <span>{fmtDate(post.data.date)}</span>
-          <span>{calcReadTime(post.body ?? '')}</span>
-        </span>
-      </a>
-    ))}
-  </div>
+  <section id="focus">
+    <div class="sec-head">
+      <span class="p-sym">$</span><span class="cmd">cat</span><span class="arg">focus_areas.md</span>
+    </div>
+    <div class="focus-grid">
+      <div class="focus-item">
+        <h3>~/web-app-pentesting</h3>
+        <p>Authenticated &amp; unauthenticated web application assessments across modern stacks.</p>
+      </div>
+      <div class="focus-item">
+        <h3>~/red-teaming</h3>
+        <p>Adversary emulation, initial access, lateral movement and post-exploitation.</p>
+      </div>
+      <div class="focus-item">
+        <h3>~/android-sec</h3>
+        <p>Android app reversing, runtime instrumentation and API abuse.</p>
+      </div>
+      <div class="focus-item">
+        <h3>~/cti</h3>
+        <p>Cyber threat intelligence — tracking actors, IOCs and campaign infrastructure.</p>
+      </div>
+      <div class="focus-item">
+        <h3>~/malware-dev</h3>
+        <p>Offensive tooling, evasion research and custom implants for red team ops.</p>
+      </div>
+      <div class="focus-item quip">
+        <h3>~/disclaimer</h3>
+        <p>you don't need to know all of them :)</p>
+      </div>
+    </div>
+  </section>
 
-  <div class="section-head" id="projects">
-    <span class="section-title">Projects</span>
-    <a class="section-more" href="https://github.com/ozcanpng" target="_blank" rel="noopener">GitHub ↗</a>
-  </div>
-  <div class="project-grid">
-    {REPOS.map(r => {
-      const color = r.language ? LANG_COLORS[r.language] : null;
-      return (
-        <a class="project-card" href={r.html_url} target="_blank" rel="noopener">
-          <div class="project-name">{r.name}</div>
-          <div class="project-desc">{r.description}</div>
-          <div class="project-meta">
-            {r.language && (
-              <span class="lang-label">
-                {color && <span class="lang-dot" style={`background:${color}`} />}
-                {r.language}
-              </span>
-            )}
-            {r.stargazers_count > 0 && <span>★ {r.stargazers_count}</span>}
-          </div>
+  <section id="honors">
+    <div class="sec-head">
+      <span class="p-sym">$</span><span class="cmd">ls</span><span class="arg">~/honors</span>
+    </div>
+    <div class="honors">
+      <div class="honor">
+        <div class="honor-body">
+          <h4>BEING-WiSE CTF 2025 — 1st Place, Team DELiLER</h4>
+          <div class="org">Issued by BEING-WISE</div>
+        </div>
+        <div class="honor-date">Nov 2025</div>
+      </div>
+      <div class="honor">
+        <div class="honor-body">
+          <h4>Siber Vatan Bootcamp CTF 2025 — 5th Place, Solo</h4>
+          <div class="org">Issued by Siber Vatan</div>
+        </div>
+        <div class="honor-date">Jul 2025</div>
+      </div>
+      <div class="honor">
+        <div class="honor-body">
+          <h4>Reference Letter — Penetration Testing &amp; Vulnerability Assessment</h4>
+          <div class="org">Issued by Erzurum Technical University</div>
+          <p class="desc">
+            As part of a penetration test I conducted at Erzurum Technical University,
+            I thoroughly analyzed security vulnerabilities and reported them to the
+            institution. In recognition of my contribution, I was awarded a letter of
+            reference by the university.
+          </p>
+        </div>
+        <div class="honor-date">Apr 2025</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="blog">
+    <div class="sec-head">
+      <span class="p-sym">$</span><span class="cmd">ls</span><span class="arg">-la ~/blogs</span>
+    </div>
+    <div class="rows">
+      {recentPosts.map(post => (
+        <a class="row" href={`/blog/${post.slug}/`}>
+          <span class={`tag ${post.data.tag}`}>{post.data.tag}</span>
+          <span class="row-title">{post.data.title}</span>
+          <span class="row-meta">
+            <span class="stars" set:html={stars(post.data.difficulty)}></span>
+            <span>{fmt(post.data.date)}</span>
+            <span>{readTime(post.body)}</span>
+          </span>
         </a>
-      );
-    })}
-    <a class="project-card project-card-more" href="https://github.com/ozcanpng" target="_blank" rel="noopener">
-      View all on GitHub →
-    </a>
-  </div>
+      ))}
+    </div>
+    <div class="view-all"><a href="/blog/">view all →</a></div>
+  </section>
 
-  <section class="about-section" id="about">
+  <section id="projects">
+    <div class="sec-head">
+      <span class="p-sym">$</span><span class="cmd">git</span><span class="arg">log --oneline ~/projects</span>
+    </div>
+    <div class="proj-grid">
+      <a class="proj" href="https://github.com/ozcanpng/SecureShift" target="_blank" rel="noopener">
+        <div class="proj-name">SecureShift</div>
+        <p class="proj-desc">Security training project with Go and SQLite showcasing common web vulnerabilities.</p>
+        <div class="proj-meta">
+          <span class="lang-label"><span class="lang-dot" style="background:#00add8"></span>Go</span>
+          <span>★ 2</span>
+        </div>
+      </a>
+      <a class="proj" href="https://github.com/ozcanpng/Stock-Hunter" target="_blank" rel="noopener">
+        <div class="proj-name">Stock-Hunter</div>
+        <p class="proj-desc">Track Zara, Pull&amp;Bear, Bershka products — get notified instantly when stock arrives.</p>
+        <div class="proj-meta">
+          <span class="lang-label"><span class="lang-dot" style="background:#3572a5"></span>Python</span>
+          <span>★ 2</span>
+        </div>
+      </a>
+      <a class="proj" href="https://github.com/ozcanpng/Cargo-Tracking-System" target="_blank" rel="noopener">
+        <div class="proj-name">Cargo-Tracking-System</div>
+        <p class="proj-desc">Cargo tracking web application using Flask and MySQL.</p>
+        <div class="proj-meta">
+          <span class="lang-label"><span class="lang-dot" style="background:#e34c26"></span>HTML</span>
+        </div>
+      </a>
+      <a class="proj" href="https://github.com/ozcanpng/pico-ducky" target="_blank" rel="noopener">
+        <div class="proj-name">pico-ducky</div>
+        <p class="proj-desc">Rubber Ducky-like device using Raspberry Pi Pico. Turkish translated source.</p>
+        <div class="proj-meta">
+          <span class="lang-label"><span class="lang-dot" style="background:#3572a5"></span>Python</span>
+          <span>★ 1</span>
+        </div>
+      </a>
+      <a class="proj" href="https://github.com/ozcanpng/BadPico" target="_blank" rel="noopener">
+        <div class="proj-name">BadPico</div>
+        <p class="proj-desc">Payloads for Raspberry Pi Pico — everything the USB Rubber Ducky can do.</p>
+        <div class="proj-meta">
+          <span>★ 1</span>
+        </div>
+      </a>
+      <a class="proj proj-more" href="https://github.com/ozcanpng" target="_blank" rel="noopener">
+        View all on GitHub →
+      </a>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="sec-head">
+      <span class="p-sym">$</span><span class="cmd">whoami</span>
+    </div>
     <img class="about-avatar" src="https://github.com/ozcanpng.png" alt="ozcanpng" />
-    <h1 class="about-name">Özcan Ersan</h1>
-    <p class="about-role">Offensive Security · ozcanpng</p>
+    <h2 class="about-name">Özcan Ersan</h2>
+    <div class="about-role">Offensive Security Researcher · ozcanpng</div>
     <div class="about-body">
-      <p>Hello! I'm a <em>4th-year Computer Engineering student</em> actively training under the <em>Siber Vatan</em> program, working towards specializing in cybersecurity.</p>
-      <p>My main focus areas are <em>Web Application Security</em> and <em>penetration testing</em>. I have a strong interest in <em>malware development</em> and regularly solve <em>CTF challenges</em> to sharpen my skills.</p>
-      <p>In my own lab environment, I conduct technical experiments, explore real-world vulnerabilities, and share findings through <em>detailed write-ups</em>.</p>
+      <p>Hello! I'm <em>Özcan Ersan</em>, a <em>4th-year Computer Engineering student</em> actively training under the <em>Siber Vatan</em> program.</p>
+      <p>I enjoy studying how <em>APT groups</em> run their red team operations and reproducing those techniques in <em>my own lab environment</em>.</p>
       <div class="badge-row">
         <span class="badge">Web App Security</span>
         <span class="badge">Penetration Testing</span>
@@ -117,24 +209,38 @@ const recentPosts = allPosts
         <span class="badge">Malware Dev</span>
         <span class="badge">CVE Research</span>
       </div>
+      <div class="badge-row">
+        <span class="badge">burp</span>
+        <span class="badge">frida</span>
+        <span class="badge">ghidra</span>
+        <span class="badge">gophish</span>
+        <span class="badge">sliver</span>
+        <span class="badge">python</span>
+        <span class="badge">golang</span>
+      </div>
     </div>
   </section>
-</Layout>
 
-<script>
+</main>
+
+</BaseLayout>
+
+<script is:inline>
+/* hero terminal typing animation */
+(function(){
   const cmds = ['go run backdoor.go', 'jadx-gui ./target.apk', 'frida -U -f com.target.app', 'adb shell id', 'burpsuite --project web.json'];
   let wi = 0, ci = 0, del = false;
-  const textEl = document.getElementById('typing-text');
-  if (textEl) {
-    function tick() {
-      const w = cmds[wi];
-      if (del) { textEl.textContent = w.slice(0, --ci); }
-      else     { textEl.textContent = w.slice(0, ++ci); }
-      let ms = del ? 45 : 100;
-      if (!del && ci === w.length) { ms = 2000; del = true; }
-      else if (del && ci === 0)    { del = false; wi = (wi + 1) % cmds.length; ms = 500; }
-      setTimeout(tick, ms);
-    }
-    setTimeout(tick, 700);
+  const el = document.getElementById('typing-text');
+  if (!el) return;
+  function tick() {
+    const w = cmds[wi];
+    if (del) { el.textContent = w.slice(0, --ci); }
+    else     { el.textContent = w.slice(0, ++ci); }
+    let ms = del ? 45 : 100;
+    if (!del && ci === w.length) { ms = 2000; del = true; }
+    else if (del && ci === 0)    { del = false; wi = (wi + 1) % cmds.length; ms = 500; }
+    setTimeout(tick, ms);
   }
+  setTimeout(tick, 700);
+})();
 </script>

@@ -1,77 +1,92 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-
-function calcReadTime(text: string): string {
-  const codeLines = (text.match(/```[\s\S]*?```/g) ?? []).reduce((s, b) => s + b.split('\n').length - 2, 0);
-  const words = text.replace(/```[\s\S]*?```/g, '').replace(/[#*_[\]()!`]/g, '').split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.round(words / 180 + codeLines / 30)) + ' min';
-}
-
-function stars(n: number): string {
-  return Array.from({ length: 5 }, (_, i) => `<span class="${i < n ? 'on' : ''}">${i < n ? '★' : '☆'}</span>`).join('');
-}
-
-function fmtDate(d: Date | string): string {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
+import '../../styles/post.css';
 
 const allPosts = await getCollection('posts');
-const posts = allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+const posts = allPosts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+function readTime(body: string): string {
+  const code = (body.match(/```[\s\S]*?```/g) || []).reduce((s, b) => s + b.split('\n').length - 2, 0);
+  const words = body.replace(/```[\s\S]*?```/g, '').replace(/[#*_[\]()!`>]/g, '').split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 180 + code / 30)) + ' min';
+}
+
+const postsData = posts.map(p => ({
+  slug: p.slug,
+  tag: p.data.tag,
+  title: p.data.title,
+  date: p.data.date.toISOString(),
+  diff: p.data.difficulty,
+  read: readTime(p.body),
+}));
+
+const blogJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'ozcanpng blog',
+  url: 'https://ozcanpng.dev/blog/',
+  author: { '@type': 'Person', name: 'Özcan Ersan' },
+  blogPost: posts.map(p => ({
+    '@type': 'BlogPosting',
+    headline: p.data.title,
+    datePublished: p.data.date.toISOString(),
+    url: `https://ozcanpng.dev/blog/${p.slug}/`,
+  })),
+};
 ---
-<Layout
-  title="Blog"
-  description="All write-ups — CTF solutions, CVE analysis, security tips."
-  canonical="https://ozcanpng.dev/blog"
+<BaseLayout
+  title="Blog — ozcanpng"
+  description="Cybersecurity write-ups by ozcanpng: CVE analyses, CTF walkthroughs and offensive security notes."
+  navActive="blog"
+  jsonLd={blogJsonLd}
 >
-  <div class="section-head" style="margin-top:2.5rem">
-    <span class="section-title">All Write-ups</span>
-  </div>
-  <div class="filter-tabs">
-    <button class="filter-tab active" data-filter="all">All</button>
-    <button class="filter-tab" data-filter="ctf">CTF</button>
-    <button class="filter-tab" data-filter="cve">CVE</button>
-    <button class="filter-tab" data-filter="tips">Tips</button>
-  </div>
-  <div class="post-list" id="all-posts">
-    {posts.map((post, i) => (
-      <a class="post-item" href={`/blog/${post.slug}`}
-        data-category={post.data.tag}
-        style={`animation-delay:${i * 55}ms`}>
-        <span class={`post-tag ${post.data.tag}`}>{post.data.tag.toUpperCase()}</span>
-        <span class="post-title">{post.data.title}</span>
-        <span class="post-meta">
-          <span class="stars" set:html={stars(post.data.difficulty)} />
-          <span>{fmtDate(post.data.date)}</span>
-          <span>{calcReadTime(post.body ?? '')}</span>
-        </span>
-      </a>
-    ))}
-  </div>
-</Layout>
 
-<script>
-  document.querySelectorAll<HTMLButtonElement>('.filter-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const f = btn.dataset.filter ?? 'all';
-      document.querySelectorAll('.filter-tab').forEach(b => {
-        b.classList.remove('active', 'active-ctf', 'active-cve', 'active-other', 'active-tips');
-      });
-      if (f === 'all') btn.classList.add('active');
-      else btn.classList.add(`active-${f}`);
+<main>
+  <div class="page-head">
+    <div class="sec-prompt">
+      <span class="s">$</span> <span class="c">ls</span> <span class="a">-la ~/blogs</span>
+    </div>
+    <h1>All Write-ups</h1>
+    <p class="page-sub">Notes, CTF walkthroughs and CVE analyses.</p>
+  </div>
 
-      let visible = 0;
-      document.querySelectorAll<HTMLElement>('.post-item').forEach(item => {
-        const match = f === 'all' || item.dataset.category === f;
-        item.style.display = match ? 'grid' : 'none';
-        if (match) {
-          item.style.animationDelay = `${visible * 45}ms`;
-          item.style.animation = 'none';
-          item.offsetHeight;
-          item.style.animation = '';
-          visible++;
-        }
-      });
-    });
-  });
+  <div class="filter-tabs" id="tabs">
+    <button class="filter-tab active" data-tag="all">all</button>
+    <button class="filter-tab" data-tag="cve">cve</button>
+    <button class="filter-tab" data-tag="ctf">ctf</button>
+    <button class="filter-tab" data-tag="tips">tips</button>
+  </div>
+
+  <div class="rows" id="list"></div>
+</main>
+
+<script is:inline define:vars={{ postsData }}>
+const fmt = d => new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const stars = n => Array.from({length:5}, (_,i) => i<n ? '<span class="on">★</span>' : '<span>☆</span>').join('');
+const list = document.getElementById('list');
+function render(filter){
+  const items = filter==='all' ? postsData : postsData.filter(p => p.tag===filter);
+  list.innerHTML = items.map(p => `
+    <a class="row" href="/blog/${p.slug}/">
+      <span class="tag ${p.tag}">${p.tag}</span>
+      <span class="row-title">${p.title}</span>
+      <span class="row-meta">
+        <span class="stars">${stars(p.diff)}</span>
+        <span>${fmt(p.date)}</span>
+        <span>${p.read}</span>
+      </span>
+    </a>
+  `).join('');
+}
+render('all');
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('.filter-tab'); if(!b) return;
+  document.querySelectorAll('.filter-tab').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  render(b.dataset.tag);
+});
 </script>
+
+</BaseLayout>

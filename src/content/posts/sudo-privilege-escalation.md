@@ -1,5 +1,5 @@
 ---
-title: "Sudo Root Escape — CVE-2025-32463"
+title: "CVE-2025-32463: Sudo Local Privilege Escalation"
 date: 2025-07-17
 tag: cve
 difficulty: 4

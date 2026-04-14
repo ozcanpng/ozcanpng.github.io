@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import '../../styles/post.css';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props { post: CollectionEntry<'posts'>; }
+
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+
+function readTime(body: string): string {
+  const code = (body.match(/```[\s\S]*?```/g) || []).reduce((s, b) => s + b.split('\n').length - 2, 0);
+  const words = body.replace(/```[\s\S]*?```/g, '').replace(/[#*_[\]()!`>]/g, '').split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 180 + code / 30)) + ' min';
+}
+function stars(n: number) {
+  return Array.from({ length: 5 }, (_, i) => i < n ? '<span class="on">★</span>' : '<span>☆</span>').join('');
+}
+function fmt(d: Date) {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const canonical = `https://ozcanpng.dev/blog/${post.slug}/`;
+const tocHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 4);
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description || post.data.title,
+  datePublished: post.data.date.toISOString(),
+  dateModified: post.data.date.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: 'Özcan Ersan',
+    url: 'https://ozcanpng.dev/',
+  },
+  publisher: { '@type': 'Person', name: 'Özcan Ersan' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  image: 'https://github.com/ozcanpng.png',
+  keywords: [post.data.tag, 'cybersecurity', 'offensive security', 'writeup', post.data.title].join(', '),
+};
+---
+<BaseLayout
+  title={`${post.data.title} — ozcanpng`}
+  description={post.data.description || post.data.title}
+  canonical={canonical}
+  ogType="article"
+  navActive="blog"
+  bodyClass="post"
+  jsonLd={articleJsonLd}
+>
+
+<main>
+  <a class="back" href="/blog/">← back to blog</a>
+  <article>
+    <span class={`post-tag ${post.data.tag}`}>{post.data.tag.toUpperCase()}</span>
+    <h1 class="post-title">{post.data.title}</h1>
+    <div class="post-meta">
+      <span>{fmt(post.data.date)}</span>
+      <span>•</span>
+      <span class="stars" title={`difficulty ${post.data.difficulty}/5`} set:html={stars(post.data.difficulty)} />
+      <span>•</span>
+      <span>{readTime(post.body)}</span>
+    </div>
+    <div class="post-divider"></div>
+
+    {tocHeadings.length >= 2 && (
+      <nav class="toc">
+        <span class="toc-label">On this page</span>
+        <ul>
+          {tocHeadings.map(h => (
+            <li class={`lvl-${h.depth}`}>
+              <a class="toc-link" href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
+
+    <div class="md">
+      <Content />
+    </div>
+  </article>
+</main>
+
+</BaseLayout>
+
+<script is:inline>
+(function(){
+  // Copy buttons on code blocks
+  document.querySelectorAll('.md pre').forEach(pre => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.type = 'button';
+    btn.textContent = 'copy';
+    btn.addEventListener('click', async () => {
+      const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.textContent = 'copied'; btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1600);
+      } catch(e) {
+        btn.textContent = 'error';
+        setTimeout(() => btn.textContent = 'copy', 1600);
+      }
+    });
+    pre.appendChild(btn);
+  });
+
+  // Lightbox for images
+  const md = document.querySelector('.md');
+  if (md) {
+    md.addEventListener('click', e => {
+      const img = e.target.closest('img'); if (!img) return;
+      const ov = document.createElement('div'); ov.className = 'lightbox-overlay';
+      const big = document.createElement('img'); big.src = img.src; big.alt = img.alt || '';
+      const close = document.createElement('button');
+      close.className = 'lightbox-close'; close.type = 'button'; close.textContent = 'esc ✕';
+      ov.append(big, close);
+      document.body.appendChild(ov);
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      function remove(){ ov.remove(); document.body.style.overflow = prev; document.removeEventListener('keydown', onKey); }
+      function onKey(e){ if (e.key === 'Escape') remove(); }
+      ov.addEventListener('click', ev => { if (ev.target === ov || ev.target === close) remove(); });
+      big.addEventListener('click', ev => ev.stopPropagation());
+      document.addEventListener('keydown', onKey);
+    });
+  }
+})();
+</script>

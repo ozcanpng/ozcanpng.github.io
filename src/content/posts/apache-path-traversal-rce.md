@@ -1,5 +1,5 @@
 ---
-title: "Apache Path Traversal RCE — CVE-2021-42013"
+title: "CVE-2021-42013: Apache Path Traversal to RCE"
 date: 2025-07-23
 tag: cve
 difficulty: 3

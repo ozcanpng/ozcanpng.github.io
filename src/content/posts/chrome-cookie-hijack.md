@@ -1,5 +1,5 @@
 ---
-title: "Session Hijacking via Chrome Debug Mode"
+title: "Chrome Cookie Theft via Remote Debugging Port"
 date: 2025-07-22
 tag: tips
 difficulty: 2
